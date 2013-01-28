@@ -3,15 +3,20 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fiscalization", "src\Fiscalization\Fiscalization.csproj", "{0451BAEF-DF2E-4B98-8644-94EE9415E389}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fiscalization.Test", "test\Fiscalization\Fiscalization.Test.csproj", "{44975527-1269-4C20-9776-80330E1C5BCE}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 2
+		SccNumberOfProjects = 3
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs37
 		SccLocalPath0 = .
 		SccProjectUniqueName1 = src\\Fiscalization\\Fiscalization.csproj
 		SccProjectName1 = src/Fiscalization
 		SccLocalPath1 = src\\Fiscalization
+		SccProjectUniqueName2 = test\\Fiscalization\\Fiscalization.Test.csproj
+		SccProjectName2 = test/Fiscalization
+		SccLocalPath2 = test\\Fiscalization
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -22,6 +27,10 @@ Global
 		{0451BAEF-DF2E-4B98-8644-94EE9415E389}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0451BAEF-DF2E-4B98-8644-94EE9415E389}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0451BAEF-DF2E-4B98-8644-94EE9415E389}.Release|Any CPU.Build.0 = Release|Any CPU
+		{44975527-1269-4C20-9776-80330E1C5BCE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{44975527-1269-4C20-9776-80330E1C5BCE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{44975527-1269-4C20-9776-80330E1C5BCE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{44975527-1269-4C20-9776-80330E1C5BCE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

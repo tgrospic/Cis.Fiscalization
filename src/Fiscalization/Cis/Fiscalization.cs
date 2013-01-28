@@ -1,5 +1,6 @@
 ﻿// Fiscalization CIS 2012 by Tomislav Grospic
 // http://fiscalization.codeplex.com/
+
 using System;
 using System.IO;
 using System.Linq;
