@@ -1,5 +1,6 @@
-﻿// Fiscalization CIS 2012 by Tomislav Grospic
+﻿// Fiscalization API CIS 2012
 // http://fiscalization.codeplex.com/
+// Copyright (c) 2013 Tomislav Grospic
 
 using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -13,19 +14,35 @@ namespace FiscalizationTest
 	[TestClass]
 	public class FiscalizationTest
 	{
+		#region Constants
+
+		// DEMO certificate and OIB not included in project source code
+		// You can paste your certificate and OIB
+		// or/and change GetCertificate method
+		const string DEMO_CERTIFICATE = DemoCertificate.CERT;
+		const string DEMO_OIB = DemoCertificate.OIB;
+
+		X509Certificate2 GetCertificate()
+		{
+			var certRaw = Convert.FromBase64String(DEMO_CERTIFICATE);
+			var certificate = new X509Certificate2(certRaw);
+
+			return certificate;
+		}
+
+		#endregion
+
 		[TestMethod]
 		public void TestInvoiceRequest()
 		{
-			// Certificate
-			var certRaw = Convert.FromBase64String(DemoCertificate.CERT);
-			var certificate = new X509Certificate2(certRaw);
+			var certificate = GetCertificate();
 			var culture = CultureInfo.GetCultureInfo("en-GB");
 
 			#region Build fiscalization request
 
 			var invoice = new RacunType()
 			{
-				Oib = DemoCertificate.OIB,
+				Oib = DEMO_OIB,
 				USustPdv = true,
 				DatVrijeme = DateTime.Now.ToString(Fiscalization.DATE_FORMAT_LONG),
 				OznSlijed = OznakaSlijednostiType.N,
@@ -89,9 +106,7 @@ namespace FiscalizationTest
 		[ExpectedException(typeof(ApplicationException), "Wrong data send to CIS service")]
 		public void TestLocationRequest()
 		{
-			// Certificate
-			var certRaw = Convert.FromBase64String(DemoCertificate.CERT);
-			var certificate = new X509Certificate2(certRaw);
+			var certificate = GetCertificate();
 			var culture = CultureInfo.GetCultureInfo("en-GB");
 
 			#region Build fiscalization request
@@ -108,7 +123,7 @@ namespace FiscalizationTest
 						Opcina = "Opcina",
 					}
 				},
-				Oib = DemoCertificate.OIB,
+				Oib = DEMO_OIB,
 				RadnoVrijeme = "radno vrijeme",
 				DatumPocetkaPrimjene = DateTime.Now.AddDays(-60).ToString(Fiscalization.DATE_FORMAT_SHORT),
 				SpecNamj = "112343454"
