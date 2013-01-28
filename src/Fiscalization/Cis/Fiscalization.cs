@@ -4,6 +4,7 @@
 using System;
 using System.IO;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 using System.Security.Cryptography.Xml;
@@ -27,7 +28,14 @@ namespace Cis
 
 		#region Service methods
 
-		public static RacunOdgovor SendInvoiceRequest(RacunZahtjev request, X509Certificate2 cert,
+		/// <summary>
+		/// Send invoice request
+		/// </summary>
+		/// <param name="request">Request to send</param>
+		/// <param name="cert">Signing certificate</param>
+		/// <param name="setupService">Function to set service settings</param>
+		/// <returns></returns>
+		public static RacunOdgovor SendInvoiceRequest(RacunZahtjev request, X509Certificate2 cert = null,
 			Action<FiskalizacijaService> setupService = null)
 		{
 			if (request == null)
@@ -38,7 +46,14 @@ namespace Cis
 			return SignAndSendRequest<RacunZahtjev, RacunOdgovor>(request, x => x.racuni, cert, setupService);
 		}
 
-		public static PoslovniProstorOdgovor SendLocationRequest(PoslovniProstorZahtjev request, X509Certificate2 cert,
+		/// <summary>
+		/// Send location request
+		/// </summary>
+		/// <param name="request">Request to send</param>
+		/// <param name="cert">Signing certificate</param>
+		/// <param name="setupService">Function to set service settings</param>
+		/// <returns></returns>
+		public static PoslovniProstorOdgovor SendLocationRequest(PoslovniProstorZahtjev request, X509Certificate2 cert = null,
 			Action<FiskalizacijaService> setupService = null)
 		{
 			if (request == null)
@@ -50,6 +65,12 @@ namespace Cis
 				request, x => x.poslovniProstor, cert, setupService);
 		}
 
+		/// <summary>
+		/// Send echo request
+		/// </summary>
+		/// <param name="echo">String to send</param>
+		/// <param name="setupService">Function to set service settings</param>
+		/// <returns></returns>
 		public static string SendEcho(string echo, Action<FiskalizacijaService> setupService = null)
 		{
 			if (echo == null)
@@ -66,17 +87,27 @@ namespace Cis
 			return result;
 		}
 
+		/// <summary>
+		/// Send request
+		/// </summary>
+		/// <typeparam name="TSource">Type of service method argument</typeparam>
+		/// <typeparam name="TResult">Type of service method result</typeparam>
+		/// <param name="request">Request to send</param>
+		/// <param name="serviceMethod">Function to provide service method</param>
+		/// <param name="cert">Signing certificate</param>
+		/// <param name="setupService">Function to set service settings</param>
+		/// <returns></returns>
 		public static TResult SignAndSendRequest<TSource, TResult>(TSource request,
-			Func<FiskalizacijaService, Func<TSource, TResult>> serviceMethod, X509Certificate2 cert,
+			Func<FiskalizacijaService, Func<TSource, TResult>> serviceMethod, X509Certificate2 cert = null,
 			Action<FiskalizacijaService> setupService = null)
-			where TSource : IRequest
-			where TResult : IResponse
+			where TSource : ICisRequest
+			where TResult : ICisResponse
 		{
 			if (request == null)
 				throw new ArgumentNullException("request");
 			if (serviceMethod == null)
 				throw new ArgumentNullException("serviceMethod");
-			if (cert == null)
+			if (cert == null && request.Signature == null)
 				throw new ArgumentNullException("cert");
 
 			// Create service endpoint
@@ -109,6 +140,10 @@ namespace Cis
 
 		#region Helpers
 
+		/// <summary>
+		/// Get default request header
+		/// </summary>
+		/// <returns></returns>
 		public static ZaglavljeType GetRequestHeader()
 		{
 			return new ZaglavljeType
@@ -118,6 +153,12 @@ namespace Cis
 			};
 		}
 
+		/// <summary>
+		/// Sign and hash with MD5 algorithm
+		/// </summary>
+		/// <param name="value">String to encrypt</param>
+		/// <param name="certificate">Signing certificate</param>
+		/// <returns>Encrypted string</returns>
 		public static string SignAndHashMD5(string value, X509Certificate2 certificate)
 		{
 			if (value == null)
@@ -138,21 +179,27 @@ namespace Cis
 			return result;
 		}
 
-		public static void Sign(IRequest request, X509Certificate2 certificate)
+		/// <summary>
+		/// Sign request
+		/// </summary>
+		/// <param name="request">Request to sign</param>
+		/// <param name="certificate">Signing certificate</param>
+		public static void Sign(ICisRequest request, X509Certificate2 certificate)
 		{
 			if (request == null)
 				throw new ArgumentNullException("request");
-			if (certificate == null)
-				throw new ArgumentNullException("certificate");
 
 			if (request.Signature != null)
 				// Already signed
 				return;
 
+			if (certificate == null)
+				throw new ArgumentNullException("certificate");
+
 			// Check if ZKI is generated
-			var invliceRequest = request as RacunZahtjev;
-			if (invliceRequest != null && invliceRequest.Racun.ZastKod == null)
-				invliceRequest.Racun.GenerateZki(certificate);
+			var invoiceRequest = request as RacunZahtjev;
+			if (invoiceRequest != null && invoiceRequest.Racun.ZastKod == null)
+				invoiceRequest.Racun.GenerateZki(certificate);
 
 			request.Id = request.GetType().Name;
 
@@ -241,7 +288,12 @@ namespace Cis
 			#endregion
 		}
 
-		public static bool CheckSignature(IRequest request)
+		/// <summary>
+		/// Check signature on request object
+		/// </summary>
+		/// <param name="request"></param>
+		/// <returns></returns>
+		public static bool CheckSignature(ICisRequest request)
 		{
 			if (request == null)
 				throw new ArgumentNullException("response");
@@ -257,6 +309,11 @@ namespace Cis
 			return CheckSignatureXml(doc);
 		}
 
+		/// <summary>
+		/// Check signature on signed XML document
+		/// </summary>
+		/// <param name="doc">Signed XML document</param>
+		/// <returns></returns>
 		public static bool CheckSignatureXml(XmlDocument doc)
 		{
 			if (doc == null)
@@ -265,27 +322,25 @@ namespace Cis
 			// Create new signed xml
 			SignedXml signedXml = new SignedXml(doc);
 
+			// Get signature property name by lambda expression
+			var signatureNodeName = GetPropertyName(x => x.Signature);
+
 			// Get signature xml node
-			var signatureNode = doc.GetElementsByTagName("Signature")[0] as XmlElement;
+			var signatureNode = doc.GetElementsByTagName(signatureNodeName)[0] as XmlElement;
 
 			// Load signature node
 			signedXml.LoadXml(signatureNode);
 
-			// Get certificate
-			X509Certificate2 certificate = null;
-			foreach (KeyInfoX509Data x in signedXml.KeyInfo)
-			{
-				if (x.Certificates.Count > 0)
-					certificate = (X509Certificate2)x.Certificates[0];
-			}
-			if (certificate == null)
-				throw new ApplicationException("Can't find certificate in signature.");
-
 			// Check signature
-			return signedXml.CheckSignature(certificate, true);
+			return signedXml.CheckSignature();
 		}
 
-		public static string Serialize(IRequest request)
+		/// <summary>
+		/// Serialize request data
+		/// </summary>
+		/// <param name="request">Request to serialize</param>
+		/// <returns></returns>
+		public static string Serialize(ICisRequest request)
 		{
 			if (request == null)
 				throw new ArgumentNullException("request");
@@ -321,18 +376,36 @@ namespace Cis
 			}
 		}
 
+		/// <summary>
+		/// Get property name by lambda expression
+		/// </summary>
+		/// <param name="selector">Function to select property</param>
+		/// <returns></returns>
+		private static string GetPropertyName(Expression<Func<ICisRequest, SignatureType>> selector)
+		{
+			var property = selector.Body as MemberExpression;
+
+			return property.Member.Name;
+		}
+
 		#endregion
 	}
 
 	#region Interfaces
 
-	public interface IRequest
+	/// <summary>
+	/// Represent request data for CIS service
+	/// </summary>
+	public interface ICisRequest
 	{
 		string Id { get; set; }
 		SignatureType Signature { get; set; }
 	}
 
-	public interface IResponse
+	/// <summary>
+	/// Represent response data from CIS service
+	/// </summary>
+	public interface ICisResponse
 	{
 		GreskaType[] Greske { get; set; }
 	}
@@ -345,6 +418,10 @@ namespace Cis
 	{
 		#region Class
 
+		/// <summary>
+		/// Custom stream to monitor other writeable stream.
+		/// Depends on Flush method
+		/// </summary>
 		private class SpyStream : MemoryStream
 		{
 			Stream writeStream = null;
@@ -385,6 +462,26 @@ namespace Cis
 
 		#region Overrides
 
+		/// <summary>
+		/// Intercept request messages
+		/// </summary>
+		/// <param name="message"></param>
+		/// <param name="bufferSize"></param>
+		/// <returns></returns>
+		protected override XmlWriter GetWriterForMessage(System.Web.Services.Protocols.SoapClientMessage message, int bufferSize)
+		{
+			this._writeStream = new SpyStream(message.Stream);
+			var wr = XmlWriter.Create(this._writeStream);
+
+			return wr;
+		}
+
+		/// <summary>
+		/// Intercept response messages
+		/// </summary>
+		/// <param name="message"></param>
+		/// <param name="bufferSize"></param>
+		/// <returns></returns>
 		protected override XmlReader GetReaderForMessage(System.Web.Services.Protocols.SoapClientMessage message, int bufferSize)
 		{
 			// Load response XML
@@ -413,14 +510,6 @@ namespace Cis
 			return System.Xml.XmlReader.Create(new StringReader(docResponse.InnerXml));
 		}
 
-		protected override XmlWriter GetWriterForMessage(System.Web.Services.Protocols.SoapClientMessage message, int bufferSize)
-		{
-			this._writeStream = new SpyStream(message.Stream);
-			var wr = XmlWriter.Create(this._writeStream);
-
-			return wr;
-		}
-
 		#endregion
 
 		#region Logging
@@ -430,16 +519,20 @@ namespace Cis
 		#endregion
 	}
 
-	public partial class RacunZahtjev : IRequest { }
+	public partial class RacunZahtjev : ICisRequest { }
 
-	public partial class PoslovniProstorZahtjev : IRequest { }
+	public partial class PoslovniProstorZahtjev : ICisRequest { }
 
-	public partial class PoslovniProstorOdgovor : IResponse { }
+	public partial class PoslovniProstorOdgovor : ICisResponse { }
 
-	public partial class RacunOdgovor : IResponse { }
+	public partial class RacunOdgovor : ICisResponse { }
 
 	public partial class RacunType
 	{
+		/// <summary>
+		/// Generate ZKI code
+		/// </summary>
+		/// <param name="certificate">Signing certificate</param>
 		public void GenerateZki(X509Certificate2 certificate)
 		{
 			if (certificate == null)

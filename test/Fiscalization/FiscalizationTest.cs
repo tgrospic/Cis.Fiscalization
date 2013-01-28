@@ -73,6 +73,7 @@ namespace FiscalizationTest
 					x.Timeout = 2000;
 
 					// We can disable response signature checking
+					// default = true
 					// x.CheckResponseSignature = false;
 				});
 
