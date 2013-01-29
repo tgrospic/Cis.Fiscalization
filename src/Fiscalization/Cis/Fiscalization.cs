@@ -452,6 +452,13 @@ namespace Cis
 
 				base.Flush();
 			}
+
+			public override void Close()
+			{
+				base.Close();
+
+				this.writeStream.Close();
+			}
 		}
 
 		#endregion
