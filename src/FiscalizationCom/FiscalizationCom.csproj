@@ -67,7 +67,6 @@
     <Compile Include="FiscalizationLogger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <None Include="FiscalizationCom.snk" />
-    <None Include="Helpers\X509Certificate2Wrapper.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="UnRegisterCOM.cmd">
