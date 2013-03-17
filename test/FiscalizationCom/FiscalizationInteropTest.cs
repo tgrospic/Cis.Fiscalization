@@ -6,6 +6,7 @@ using Cis;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Globalization;
+using System.IO;
 using System.Security.Authentication;
 using System.Security.Cryptography.X509Certificates;
 
@@ -14,27 +15,10 @@ namespace FiscalizationTest
 	[TestClass]
 	public class FiscalizationInteropTest
 	{
-		#region Constants
-
-		// DEMO certificate and OIB not included in project source code
-		// You can paste your certificate and OIB
-		// or/and change GetCertificate method
-		const string DEMO_CERTIFICATE = DemoCertificate.CERT;
-		const string DEMO_OIB = DemoCertificate.OIB;
-
-		X509Certificate2 GetCertificate()
-		{
-			var certRaw = Convert.FromBase64String(DEMO_CERTIFICATE);
-			var certificate = new X509Certificate2(certRaw);
-
-			return certificate;
-		}
-
-		#endregion
-
 		[TestMethod]
 		public void TestInvoiceRequest()
 		{
+			var certInfo = DemoCertificate.GetInfo();
 			var com = new FiscalizationComInterop();
 			var culture = CultureInfo.GetCultureInfo("en-GB");
 
@@ -42,7 +26,7 @@ namespace FiscalizationTest
 
 			var invoice = new RacunType()
 			{
-				Oib = DEMO_OIB,
+				Oib = certInfo.Oib,
 				USustPdv = true,
 				DatVrijeme = DateTime.Now.ToString(Fiscalization.DATE_FORMAT_LONG),
 				OznSlijed = OznakaSlijednostiType.N,
@@ -62,7 +46,7 @@ namespace FiscalizationTest
 
 			#endregion
 
-			var result = com.SendInvoiceRequest(request, DEMO_CERTIFICATE, 0, true);
+			var result = com.SendInvoiceRequest(request, certInfo.Certificate, 0, true);
 
 			Assert.IsNotNull(result, "Result is null.");
 			Assert.IsNotNull(result.Jir, "JIR is null.");
@@ -71,6 +55,7 @@ namespace FiscalizationTest
 		[TestMethod]
 		public void TestLocationRequest()
 		{
+			var certInfo = DemoCertificate.GetInfo();
 			var com = new FiscalizationComInterop();
 			var culture = CultureInfo.GetCultureInfo("en-GB");
 
@@ -89,7 +74,7 @@ namespace FiscalizationTest
 					}
 				},
 				OznPoslProstora = "1",
-				Oib = DEMO_OIB,
+				Oib = certInfo.Oib,
 				RadnoVrijeme = "radno vrijeme",
 				DatumPocetkaPrimjene = DateTime.Now.AddDays(-60).ToString(Fiscalization.DATE_FORMAT_SHORT),
 				SpecNamj = "112343454"
@@ -99,7 +84,7 @@ namespace FiscalizationTest
 
 			#endregion
 
-			var result = com.SendLocationRequest(request, DEMO_CERTIFICATE, 0, true);
+			var result = com.SendLocationRequest(request, certInfo.Certificate, 0, true);
 
 			Assert.IsNotNull(result, "Result is null.");
 		}

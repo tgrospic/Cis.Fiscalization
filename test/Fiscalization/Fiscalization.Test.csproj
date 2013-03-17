@@ -58,7 +58,9 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="DemoCertificate.cs" />
+    <Compile Include="DemoCertificate.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="FiscalizationTest.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -69,6 +71,14 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="DemoCertificate.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="DemoRootFINA.cer" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

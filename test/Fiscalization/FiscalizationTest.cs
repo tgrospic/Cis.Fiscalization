@@ -2,47 +2,27 @@
 // http://fiscalization.codeplex.com/
 // Copyright (c) 2013 Tomislav Grospic
 
-using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Globalization;
-using System.Security.Cryptography.X509Certificates;
 using Cis;
-using System.Security.Authentication;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
+using System.Globalization;
 
 namespace FiscalizationTest
 {
 	[TestClass]
 	public class FiscalizationTest
 	{
-		#region Constants
-
-		// DEMO certificate and OIB not included in project source code
-		// You can paste your certificate and OIB
-		// or/and change GetCertificate method
-		const string DEMO_CERTIFICATE = DemoCertificate.CERT;
-		const string DEMO_OIB = DemoCertificate.OIB;
-
-		X509Certificate2 GetCertificate()
-		{
-			var certRaw = Convert.FromBase64String(DEMO_CERTIFICATE);
-			var certificate = new X509Certificate2(certRaw);
-
-			return certificate;
-		}
-
-		#endregion
-
 		[TestMethod]
 		public void TestInvoiceRequest()
 		{
-			var certificate = GetCertificate();
+			var certInfo = DemoCertificate.GetInfo();
 			var culture = CultureInfo.GetCultureInfo("en-GB");
 
 			#region Build fiscalization request
 
 			var invoice = new RacunType()
 			{
-				Oib = DEMO_OIB,
+				Oib = certInfo.Oib,
 				USustPdv = true,
 				DatVrijeme = DateTime.Now.ToString(Fiscalization.DATE_FORMAT_LONG),
 				OznSlijed = OznakaSlijednostiType.N,
@@ -77,7 +57,7 @@ namespace FiscalizationTest
 
 			// Send request
 			// Response signature is checked automaticaly
-			var result = Fiscalization.SendInvoiceRequest(request, certificate,
+			var result = Fiscalization.SendInvoiceRequest(request, certInfo.Certificate,
 				x =>
 				{
 					// SOAP service settings
@@ -106,7 +86,7 @@ namespace FiscalizationTest
 		[ExpectedException(typeof(ApplicationException), "Wrong data send to CIS service")]
 		public void TestLocationRequest()
 		{
-			var certificate = GetCertificate();
+			var certInfo = DemoCertificate.GetInfo();
 			var culture = CultureInfo.GetCultureInfo("en-GB");
 
 			#region Build fiscalization request
@@ -123,7 +103,7 @@ namespace FiscalizationTest
 						Opcina = "Opcina",
 					}
 				},
-				Oib = DEMO_OIB,
+				Oib = certInfo.Oib,
 				RadnoVrijeme = "radno vrijeme",
 				DatumPocetkaPrimjene = DateTime.Now.AddDays(-60).ToString(Fiscalization.DATE_FORMAT_SHORT),
 				SpecNamj = "112343454"
@@ -139,7 +119,7 @@ namespace FiscalizationTest
 
 			// Send request
 			// Response signature is checked automaticaly
-			var result = Fiscalization.SendLocationRequest(request, certificate);
+			var result = Fiscalization.SendLocationRequest(request, certInfo.Certificate, x => x.Url = Fiscalization.SERVICE_URL_DEMO);
 
 			// Check request signature
 			var isValid = Fiscalization.CheckSignature(request);
@@ -147,7 +127,6 @@ namespace FiscalizationTest
 			Assert.IsTrue(isValid, "Request signature check failed.");
 			Assert.IsNotNull(result, "Result is null.");
 		}
-
 
 		[TestMethod]
 		public void TestEchoRequest()
