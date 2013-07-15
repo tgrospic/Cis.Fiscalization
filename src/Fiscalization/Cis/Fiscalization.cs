@@ -360,7 +360,8 @@ namespace Cis
 				var r = rz.Racun;
 				Action<Array, Action> fixArray = (x, y) =>
 				{
-					if (x != null && x.Length == 0)
+					var isEmpty = x != null && !x.OfType<object>().Any(x1 => x1 != null);
+					if (isEmpty)
 						y();
 				};
 				fixArray(r.Naknade, () => r.Naknade = null);

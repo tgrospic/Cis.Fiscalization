@@ -35,7 +35,18 @@ With invoiceNr
 	.OznPosPr = "1"
 	.OznNapUr = "1"
 End With
-	
+
+' Create taxes
+Dim pdv25
+Set pdv25 = CreateObject("Cis.PorezType")
+With pdv25
+	.Stopa = "25.00"
+	.Osnovica = "10.00"
+	.Iznos = "2.50"
+End With
+Dim taxes(1)
+Set taxes(0) = pdv25
+
 ' Create Racun
 Dim invoice
 Set invoice = CreateObject("Cis.RacunType")
@@ -49,6 +60,8 @@ With invoice
 	.OibOper = "98642375382"
 	.NakDost = False
 	.BrRac = invoiceNr
+	' Convert Variant() to PorezType[]
+	.Pdv = cisInterop.ToPorezTypeArray((taxes))
 End With
 
 ' invoice.ZastKod <- filled with generated ZKI code - optional

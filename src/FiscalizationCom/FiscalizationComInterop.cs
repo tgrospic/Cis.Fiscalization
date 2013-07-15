@@ -7,6 +7,7 @@
 
 using Cis;
 using System;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography.X509Certificates;
 
@@ -222,6 +223,25 @@ public class FiscalizationComInterop
 		
 		return Convert.ToBase64String(rawExport);
 	}
+
+	#region VBScript helpers - Variant() convert to type arrays
+
+	public PorezType[] ToPorezTypeArray(object[] variantArray)
+	{
+		return variantArray.Cast<PorezType>().ToArray();
+	}
+
+	public PorezOstaloType[] ToPorezOstaloTypeArray(object[] variantArray)
+	{
+		return variantArray.Cast<PorezOstaloType>().ToArray();
+	}
+
+	public NaknadaType[] ToNaknadaTypeArray(object[] variantArray)
+	{
+		return variantArray.Cast<NaknadaType>().ToArray();
+	}
+
+	#endregion
 
 	#endregion
 

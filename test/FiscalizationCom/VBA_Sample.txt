@@ -43,7 +43,7 @@ Public Function SendInvoiceTest()
         .Iznos = "2.50"
     End With
     Dim taxes(1) As PorezType
-    Set taxes(1) = pdv25
+    Set taxes(0) = pdv25
     
     ' Create Racun
     Dim invoice As New RacunType
