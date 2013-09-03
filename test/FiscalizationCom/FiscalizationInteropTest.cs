@@ -77,7 +77,8 @@ namespace FiscalizationTest
 				Oib = certInfo.Oib,
 				RadnoVrijeme = "radno vrijeme",
 				DatumPocetkaPrimjene = DateTime.Now.AddDays(-60).ToString(Fiscalization.DATE_FORMAT_SHORT),
-				SpecNamj = "112343454"
+				SpecNamj = "112343454",
+				OznakaZatvaranja = OznakaZatvaranjaType.Z, OznakaZatvaranjaSpecified = true
 			};
 
 			var request = com.CreateLocationRequest(loc);

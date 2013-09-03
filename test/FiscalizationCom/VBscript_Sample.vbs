@@ -77,4 +77,4 @@ Call cisInterop.Sign((request), (cert))
 Dim result 'As RacunOdgovor
 Set result = cisInterop.SendInvoiceRequest((request), (cert), 0, True)
 	
-MsgBox (result.Jir)
+MsgBox ("JIR: " + result.Jir)
