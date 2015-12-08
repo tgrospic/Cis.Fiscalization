@@ -1,23 +1,19 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 14
+VisualStudioVersion = 14.0.23107.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fiscalization", "src\Fiscalization\Fiscalization.csproj", "{0451BAEF-DF2E-4B98-8644-94EE9415E389}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fiscalization.Test", "test\Fiscalization\Fiscalization.Test.csproj", "{44975527-1269-4C20-9776-80330E1C5BCE}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{877143AF-A16D-4AED-AF5C-A5D2D256A0DD}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		.gitignore = .gitignore
+	EndProjectSection
+EndProject
 Global
-	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 3
-		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs37
-		SccLocalPath0 = .
-		SccProjectUniqueName1 = src\\Fiscalization\\Fiscalization.csproj
-		SccProjectName1 = src/Fiscalization
-		SccLocalPath1 = src\\Fiscalization
-		SccProjectUniqueName2 = test\\Fiscalization\\Fiscalization.Test.csproj
-		SccProjectName2 = test/Fiscalization
-		SccLocalPath2 = test\\Fiscalization
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU

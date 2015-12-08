@@ -1,0 +1,12 @@
+/.vs
+/packages
+obj
+bin
+*.user
+*.nupkg
+nuget.exe
+/TestResults
+
+DemoCertificate.txt
+docs/*.html
+README.html
