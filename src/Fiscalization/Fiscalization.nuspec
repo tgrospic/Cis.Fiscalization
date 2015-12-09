@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<package >
+	<metadata>
+		<id>Cis.Fiscalization</id>
+		<version>1.2.0</version>
+		<title>Fiskalizacija API (CIS)</title>
+		<authors>Tomislav Grospić</authors>
+		<owners>Tomislav Grospić</owners>
+		<releaseNotes>- dodane async metode za .NET 4.5
+- dodane metode za jednostavniji način slanja računa i poslovnog prostora (zahtjev se kreira automatski)
+- test sa certifikatom Fina okoline 2014/2015
+- NuGet package specifikacija u projektu
+- NuGet package samo sa source kôdom bez WSDL sheme</releaseNotes>
+		<summary>.NET (C#) wrapper za pozivanje fiskalizacijskog servisa porezne uprave (CIS v1.2)</summary>
+		<description>.NET (C#) wrapper oko generiranog SOAP klijenta za pozivanje fiskalizacijskog servisa porezne uprave (CIS v1.2).
+
+Sa Microsoft Wsdl.exe tool-om su generirane proxy klase sa strukturom po WSDL shemi koja je objavljena na stranicama porezne uprave Tehničke specifikacije i koja je uključena u source kôd projekta.
+Preko generiranog SOAP klijenta FiskalizacijaService se rade svi SOAP pozivi prema CIS servisu.
+
+Runtime:
+- .NET 3.5
+- .NET 4.5 (async)
+
+Cilj projekta
+
+- uključiti source kôd u postojeći projekt umjesto referenciranja third party dll-a, naravno dostupan i kao NuGet package
+- jednostavan upgrade u slučaju promjene sheme CIS servisa uz compile-time check
+- svaki poziv servisa treba automatski odraditi generiranje ZKI kôda i potpisivanje, isto tako i provjeru potpisa CIS odgovora, ali imati i opcije Sign(ICisRequest, X509Certificate2) i GenerateZki(RacunType, X509Certificate2)
+- sve greške koje šalje CIS servis pretvoriti u Exception-e, unificirati logiranje i imati pregled svih grešaka na jednak način
+- ne parsirati raw SOAP poruke, a istovremeno omogućiti potpisivanje i logiranje raw poruka</description>
+		<tags>fiskalizacija fiscalization cis porezna fina</tags>
+		<language>hr-HR</language>
+		<projectUrl>https://github.com/tgrospic/Cis.Fiscalization</projectUrl>
+		<licenseUrl>https://github.com/tgrospic/Cis.Fiscalization/blob/master/LICENSE</licenseUrl>
+		<requireLicenseAcceptance>false</requireLicenseAcceptance>
+		<copyright>Copyright 2015</copyright>
+		<dependencies>
+		</dependencies>
+		<references>
+		</references>
+		<frameworkAssemblies>
+			<frameworkAssembly assemblyName="System" />
+			<frameworkAssembly assemblyName="System.Runtime.Serialization" />
+			<frameworkAssembly assemblyName="System.Security" />
+			<frameworkAssembly assemblyName="System.ServiceModel" />
+			<frameworkAssembly assemblyName="System.Web" />
+			<frameworkAssembly assemblyName="System.Web.Services" />
+			<frameworkAssembly assemblyName="System.XML" />
+		</frameworkAssemblies>
+	</metadata>
+	<files>
+		<file src="Cis\Fiscalization.cs" target="content\net35\Cis" />
+		<file src="Cis\FiskalizacijaService.cs" target="content\net35\Cis" />
+
+		<file src="Cis\*.*" target="content\net45\Cis" />
+
+		<file src="FiscalizationNugetRuntimeError.cs" target="content\Cis" />
+	</files>
+</package>

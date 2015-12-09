@@ -58,6 +58,7 @@
     <Compile Include="Cis\Fiscalization.Async.cs" />
     <Compile Include="Cis\Fiscalization.cs" />
     <Compile Include="Cis\FiskalizacijaService.cs" />
+    <Content Include="FiscalizationNugetRuntimeError.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Cis\Generator\GenerateFromWsdl.cmd" />
@@ -68,6 +69,9 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Cis\Generator\wsdl\FiskalizacijaService.wsdl" />
+    <None Include="Fiscalization.nuspec">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
