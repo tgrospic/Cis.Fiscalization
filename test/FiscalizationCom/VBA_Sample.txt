@@ -1,12 +1,8 @@
-﻿' Fiscalization API CIS 2012
-' http://fiscalization.codeplex.com/
-' Copyright (c) 2013 Tomislav Grospic
-
-Public Function SendInvoiceTest()
+﻿Public Function SendInvoiceTest()
 
     ' .NET COM Interop
     Dim cisInterop As New FiscalizationComInterop
-    
+
     ' Set logging
     cisInterop.LogFileName = CurrentProject.Path + "\Fiscal.log"
 
@@ -26,7 +22,7 @@ Public Function SendInvoiceTest()
     Dim cert
     'Set cert = cisInterop.GetCertificateFile(CurrentProject.Path + "\<certificate file name>.pfx", "<password>")
     Set cert = cisInterop.GetCertificateString(certBase64, certPwd)
-    
+
     ' Create invoice number
     Dim invoiceNr As New BrojRacunaType
     With invoiceNr
@@ -34,7 +30,7 @@ Public Function SendInvoiceTest()
         .OznPosPr = "1"
         .OznNapUr = "1"
     End With
-    
+
     ' Create taxes
     Dim pdv25 As New PorezType
     With pdv25
@@ -44,7 +40,7 @@ Public Function SendInvoiceTest()
     End With
     Dim taxes(1) As PorezType
     Set taxes(0) = pdv25
-    
+
     ' Create Racun
     Dim invoice As New RacunType
     With invoice
@@ -59,20 +55,14 @@ Public Function SendInvoiceTest()
         .BrRac = invoiceNr
         .Pdv = taxes
     End With
-    
+
     ' invoice.ZastKod <- filled with generated ZKI code - optional
-    Call cisInterop.GenerateZki(invoice, (cert))
-    
-    Dim request As RacunZahtjev
-    Set request = cisInterop.CreateInvoiceRequest(invoice)
-        
-    ' Call GenerateZki and Sign request - optional
-    Call cisInterop.Sign(request, (cert))
-        
+    ' Call cisInterop.GenerateZki(invoice, (cert))
+
     ' Send request
     Dim result As RacunOdgovor
-    Set result = cisInterop.SendInvoiceRequest(request, (cert), 0, True)
-    
+    Set result = cisInterop.SendInvoice(invoice, (cert), 0, True)
+
     MsgBox (result.Jir)
-    
+
 End Function

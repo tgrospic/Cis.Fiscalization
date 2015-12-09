@@ -1,52 +1,18 @@
-﻿// Fiscalization API CIS 2012
-// http://fiscalization.codeplex.com/
-// Copyright (c) 2013 Tomislav Grospic
-
-using Cis;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Globalization;
-using System.IO;
-using System.Security.Authentication;
-using System.Security.Cryptography.X509Certificates;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace FiscalizationTest
 {
 	[TestClass]
 	public class FiscalizationInteropTest
 	{
+		TestEnvironment Demo = TestEnvironment.Create();
+
 		[TestMethod]
 		public void TestInvoiceRequest()
 		{
-			var certInfo = DemoCertificate.GetInfo();
 			var com = new FiscalizationComInterop();
-			var culture = CultureInfo.GetCultureInfo("en-GB");
 
-			#region Build fiscalization request
-
-			var invoice = new RacunType()
-			{
-				Oib = certInfo.Oib,
-				USustPdv = true,
-				DatVrijeme = DateTime.Now.ToString(Fiscalization.DATE_FORMAT_LONG),
-				OznSlijed = OznakaSlijednostiType.N,
-				IznosUkupno = 3.ToString("N2", culture),
-				NacinPlac = NacinPlacanjaType.G,
-				OibOper = "98642375382",
-				NakDost = false,
-				BrRac = new BrojRacunaType()
-				{
-					BrOznRac = "1",
-					OznPosPr = "1",
-					OznNapUr = "1"
-				}
-			};
-
-			var request = com.CreateInvoiceRequest(invoice);
-
-			#endregion
-
-			var result = com.SendInvoiceRequest(request, certInfo.Certificate, 0, true);
+			var result = com.SendInvoice(Demo.Invoice(Demo.Oib), Demo.Certificate, timeout: 0, isDemo: true, checkResponseSignature: true);
 
 			Assert.IsNotNull(result, "Result is null.");
 			Assert.IsNotNull(result.Jir, "JIR is null.");
@@ -55,37 +21,9 @@ namespace FiscalizationTest
 		[TestMethod]
 		public void TestLocationRequest()
 		{
-			var certInfo = DemoCertificate.GetInfo();
 			var com = new FiscalizationComInterop();
-			var culture = CultureInfo.GetCultureInfo("en-GB");
 
-			#region Build fiscalization request
-
-			var loc = new PoslovniProstorType()
-			{
-				AdresniPodatak = new AdresniPodatakType
-				{
-					Item = new AdresaType()
-					{
-						Ulica = "Ulica",
-						BrojPoste = "10000",
-						Naselje = "Naselje",
-						Opcina = "Opcina",
-					}
-				},
-				OznPoslProstora = "1",
-				Oib = certInfo.Oib,
-				RadnoVrijeme = "radno vrijeme",
-				DatumPocetkaPrimjene = DateTime.Now.AddDays(-60).ToString(Fiscalization.DATE_FORMAT_SHORT),
-				SpecNamj = "112343454",
-				OznakaZatvaranja = OznakaZatvaranjaType.Z, OznakaZatvaranjaSpecified = true
-			};
-
-			var request = com.CreateLocationRequest(loc);
-
-			#endregion
-
-			var result = com.SendLocationRequest(request, certInfo.Certificate, 0, true);
+			var result = com.SendLocation(Demo.Location(Demo.Oib), Demo.Certificate, timeout: 0, isDemo: true, checkResponseSignature: true);
 
 			Assert.IsNotNull(result, "Result is null.");
 		}
@@ -95,7 +33,7 @@ namespace FiscalizationTest
 		{
 			var com = new FiscalizationComInterop();
 			var msg = "echo message";
-			var result = com.SendEcho(msg, 0, true);
+			var result = com.SendEcho(msg, timeout: 0, isDemo: true);
 
 			Assert.AreEqual(msg, result, "Echo method result not equal.");
 		}

@@ -63,7 +63,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="DemoCertificate.cs">
+    <Compile Include="TestEnvironment.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="FiscalizationTest.cs" />
@@ -81,9 +81,6 @@
     <None Include="DemoCertificate.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="DemoRootFINA.cer" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

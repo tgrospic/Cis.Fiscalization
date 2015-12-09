@@ -1,7 +1,3 @@
-' Fiscalization API CIS 2012
-' http://fiscalization.codeplex.com/
-' Copyright (c) 2013 Tomislav Grospic
-
 '.NET COM Interop
 Dim cisInterop
 Set cisInterop = CreateObject("FiscalizationComInterop")
@@ -67,14 +63,8 @@ End With
 ' invoice.ZastKod <- filled with generated ZKI code - optional
 Call cisInterop.GenerateZki((invoice), (cert))
 
-Dim request' As RacunZahtjev
-Set request = cisInterop.CreateInvoiceRequest((invoice))
-	
-' Call GenerateZki and Sign request - optional
-Call cisInterop.Sign((request), (cert))
-	
 ' Send request
 Dim result 'As RacunOdgovor
-Set result = cisInterop.SendInvoiceRequest((request), (cert), 0, True)
-	
+Set result = cisInterop.SendInvoice((invoice), (cert), 0, True)
+
 MsgBox ("JIR: " + result.Jir)

@@ -1,138 +1,129 @@
-﻿// Fiscalization API CIS 2012
-// http://fiscalization.codeplex.com/
-// Copyright (c) 2013 Tomislav Grospic
-
 using Cis;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using System.Globalization;
+using System.Threading.Tasks;
 
 namespace FiscalizationTest
 {
 	[TestClass]
 	public class FiscalizationTest
 	{
-		[TestMethod]
-		public void TestInvoiceRequest()
+		TestEnvironment Demo = TestEnvironment.Create();
+
+		void DemoSetup(FiskalizacijaService fs)
 		{
-			var certInfo = DemoCertificate.GetInfo();
-			var culture = CultureInfo.GetCultureInfo("en-GB");
+			// Set CIS service URL
+			// default = Fiscalization.SERVICE_URL_PRODUCTION
+			fs.Url = Fiscalization.SERVICE_URL_DEMO;
 
-			#region Build fiscalization request
+			// Set request timeout in miliseconds
+			// default = 100s
+			fs.Timeout = 2000;
 
-			var invoice = new RacunType()
-			{
-				Oib = certInfo.Oib,
-				USustPdv = true,
-				DatVrijeme = DateTime.Now.ToString(Fiscalization.DATE_FORMAT_LONG),
-				OznSlijed = OznakaSlijednostiType.N,
-				IznosUkupno = 3.ToString("N2", culture),
-				NacinPlac = NacinPlacanjaType.G,
-				OibOper = "98642375382",
-				NakDost = false,
-				BrRac = new BrojRacunaType()
-				{
-					BrOznRac = "1",
-					OznPosPr = "1",
-					OznNapUr = "1"
-				},
-				Pdv = new[]
-				{
-					new PorezType
-					{
-						Stopa = 25M.ToString("N2", culture),
-						Osnovica = 2.34M.ToString("N2", culture),
-						Iznos = 0.59M.ToString("N2", culture),
-					}
-				}
-			};
+			// Set response signature checking
+			// default = true
+			fs.CheckResponseSignature = true;
+		}
 
-			var request = new RacunZahtjev
-			{
-				Racun = invoice,
-				Zaglavlje = Cis.Fiscalization.GetRequestHeader()
-			};
+		// Test async API
+		[TestMethod]
+		public async Task TestInvoiceRequestAsync()
+		{
+			// Create demo invoice
+			RacunType invoice = Demo.Invoice(Demo.Oib);
 
-			#endregion
+			var result = await Fiscalization.SendInvoiceAsync(invoice, Demo.Certificate, DemoSetup);
 
-			// Send request
-			// Response signature is checked automaticaly
-			var result = Fiscalization.SendInvoiceRequest(request, certInfo.Certificate,
-				x =>
-				{
-					// SOAP service settings
-					// Change service URL
-					// default = Fiscalization.SERVICE_URL_PRODUCTION
-					x.Url = Fiscalization.SERVICE_URL_DEMO;
-
-					// Set request timeout in miliseconds
-					// default = 100s
-					x.Timeout = 2000;
-
-					// We can disable response signature checking
-					// default = true
-					// x.CheckResponseSignature = false;
-				});
-
-			// Check request signature
-			var isValid = Fiscalization.CheckSignature(request);
-			
-			Assert.IsTrue(isValid, "Request signature check failed.");
 			Assert.IsNotNull(result, "Result is null.");
 			Assert.IsNotNull(result.Jir, "JIR is null.");
 		}
 
 		[TestMethod]
-		[ExpectedException(typeof(ApplicationException), "Wrong data send to CIS service")]
+		[ExpectedException(typeof(ApplicationException), "Invalid OIB sent to CIS service.")]
+		public async Task TestInvalidInvoiceRequestAsync()
+		{
+			// Create demo invoice with invalid OIB, must throw exception (message from GreskaType)
+			RacunType invoice = Demo.Invoice("invalid OIB");
+
+			await Fiscalization.SendInvoiceAsync(invoice, Demo.Certificate, DemoSetup);
+		}
+
+		[TestMethod]
+		public async Task TestLocationRequestAsync()
+		{
+			PoslovniProstorType location = Demo.Location(Demo.Oib);
+
+			var result = await Fiscalization.SendLocationAsync(location, Demo.Certificate, DemoSetup);
+
+			Assert.IsNotNull(result, "Result is null.");
+		}
+
+		[TestMethod]
+		[ExpectedException(typeof(ApplicationException), "Invalid OIB sent to CIS service.")]
+		public async Task TestInvalidLocationRequestAsync()
+		{
+			PoslovniProstorType location = Demo.Location("invalid OIB");
+
+			await Fiscalization.SendLocationAsync(location, Demo.Certificate, DemoSetup);
+		}
+
+		[TestMethod]
+		public async Task TestEchoRequestAsync()
+		{
+			var msg = "echo message";
+			var result = await Fiscalization.SendEchoAsync(msg, DemoSetup);
+
+			Assert.AreEqual(msg, result, "Echo method result not equal.");
+		}
+
+		// Test sync API
+		[TestMethod]
+		public void TestInvoiceRequest()
+		{
+			// Create demo invoice
+			RacunType invoice = Demo.Invoice(Demo.Oib);
+
+			// Send request with response signature checking
+			var result = Fiscalization.SendInvoice(invoice, Demo.Certificate, DemoSetup);
+
+			Assert.IsNotNull(result, "Result is null.");
+			Assert.IsNotNull(result.Jir, "JIR is null.");
+		}
+
+		[TestMethod]
+		[ExpectedException(typeof(ApplicationException), "Invalid OIB sent to CIS service.")]
+		public void TestInvalidInvoiceRequest()
+		{
+			// Create demo invoice with invalid OIB, must throw exception (message from GreskaType)
+			RacunType invoice = Demo.Invoice("invalid OIB");
+
+			Fiscalization.SendInvoice(invoice, Demo.Certificate, DemoSetup);
+		}
+
+		[TestMethod]
 		public void TestLocationRequest()
 		{
-			var certInfo = DemoCertificate.GetInfo();
-			var culture = CultureInfo.GetCultureInfo("en-GB");
+			PoslovniProstorType location = Demo.Location(Demo.Oib);
 
-			#region Build fiscalization request
+			PoslovniProstorOdgovor result = Fiscalization.SendLocation(location, Demo.Certificate, DemoSetup);
 
-			var loc = new PoslovniProstorType()
-			{
-				AdresniPodatak = new AdresniPodatakType
-				{
-					Item = new AdresaType()
-					{
-						Ulica = "Ulica",
-						BrojPoste = "BrojPoste",
-						Naselje = "Naselje",
-						Opcina = "Opcina",
-					}
-				},
-				Oib = certInfo.Oib,
-				RadnoVrijeme = "radno vrijeme",
-				DatumPocetkaPrimjene = DateTime.Now.AddDays(-60).ToString(Fiscalization.DATE_FORMAT_SHORT),
-				SpecNamj = "112343454"
-			};
-
-			var request = new PoslovniProstorZahtjev
-			{
-				PoslovniProstor = loc,
-				Zaglavlje = Cis.Fiscalization.GetRequestHeader()
-			};
-
-			#endregion
-
-			// Send request
-			// Response signature is checked automaticaly
-			var result = Fiscalization.SendLocationRequest(request, certInfo.Certificate, x => x.Url = Fiscalization.SERVICE_URL_DEMO);
-
-			// Check request signature
-			var isValid = Fiscalization.CheckSignature(request);
-
-			Assert.IsTrue(isValid, "Request signature check failed.");
 			Assert.IsNotNull(result, "Result is null.");
+		}
+
+		[TestMethod]
+		[ExpectedException(typeof(ApplicationException), "Invalid OIB sent to CIS service.")]
+		public void TestInvalidLocationRequest()
+		{
+			PoslovniProstorType location = Demo.Location("invalid OIB");
+
+			Fiscalization.SendLocation(location, Demo.Certificate, DemoSetup);
 		}
 
 		[TestMethod]
 		public void TestEchoRequest()
 		{
 			var msg = "echo message";
-			var result = Fiscalization.SendEcho(msg, x => x.Url = Fiscalization.SERVICE_URL_DEMO);
+			var result = Fiscalization.SendEcho(msg, DemoSetup);
 
 			Assert.AreEqual(msg, result, "Echo method result not equal.");
 		}

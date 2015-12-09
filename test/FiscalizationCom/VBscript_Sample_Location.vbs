@@ -1,7 +1,3 @@
-' Fiscalization API CIS 2012
-' http://fiscalization.codeplex.com/
-' Copyright (c) 2013 Tomislav Grospic
-
 '.NET COM Interop
 Dim cisInterop
 Set cisInterop = CreateObject("FiscalizationComInterop")
@@ -58,11 +54,8 @@ With loc
 	.OznakaZatvaranjaSpecified = True
 End With
 
-Dim request' As PoslovniProstorZahtjev
-Set request = cisInterop.CreateLocationRequest((loc))
-	
 ' Send request
 Dim result 'As PoslovniProstorOdgovor
-Set result = cisInterop.SendLocationRequest((request), (cert), 0, True)
-	
+Set result = cisInterop.SendLocation((loc), (cert), 0, True)
+
 MsgBox ("Id poruke: " + result.Zaglavlje.IdPoruke)
