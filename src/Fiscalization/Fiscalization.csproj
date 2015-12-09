@@ -55,6 +55,7 @@
     <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Cis\Fiscalization.Async.cs" />
     <Compile Include="Cis\Fiscalization.cs" />
     <Compile Include="Cis\FiskalizacijaService.cs" />
   </ItemGroup>
