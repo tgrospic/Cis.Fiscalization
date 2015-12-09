@@ -167,7 +167,7 @@ učitava demo certifikat koji nije uključen u projekt; moguće je
 
 [docs-com]: ./docs/fiscalization-com.md
 [docs-com-api]: ./docs/fiscalization-com-api.md
-[cis-version-image]: ./docs/cis-service-version.svg
+[cis-version-image]: https://cdn.rawgit.com/tgrospic/Cis.Fiscalization/master/docs/cis-service-version.svg
 [fiscalization.cs]: ./src/Fiscalization/Cis/Fiscalization.cs
 [fiscalization-async.cs]: ./src/Fiscalization/Cis/Fiscalization.Async.cs
 [fiscalization-service.cs]: ./src/Fiscalization/Cis/FiskalizacijaService.cs
