@@ -6,7 +6,7 @@
 .NET (C#) wrapper oko generiranog SOAP klijenta za pozivanje fiskalizacijskog servisa porezne uprave (CIS v1.2).
 
 Sa Microsoft [Wsdl.exe][wsdl.exe] tool-om su generirane proxy klase sa strukturom po WSDL shemi koja je objavljena na stranicama porezne uprave [Tehničke specifikacije][porezna-spec] i koja je uključena u source kôd projekta.  
-Preko generiranog SOAP klijenta [FiskalizacijaService][fiscalization-service.cs] se rade svi SOAP pozivi prema __CIS__ servisu.
+Preko generiranog SOAP klijenta [FiskalizacijaService][fiscalization-service.cs] se rade svi SOAP pozivi prema __CIS__ servisu. Kompletna implementacija je u [Fiscalization][fiscalization.cs] klasi sa dodatkom async metoda u [Fiscalization.Async.cs][fiscalization-async.cs] file-u. :smile:
 
 Runtime:
 - .NET 3.5
