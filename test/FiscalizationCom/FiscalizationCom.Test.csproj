@@ -86,10 +86,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\Fiscalization\DemoCertificate.txt">
-      <Link>DemoCertificate.txt</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="Test.accdb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

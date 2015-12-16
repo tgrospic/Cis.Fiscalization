@@ -155,11 +155,15 @@ namespace Cis
 
 U [test][test-dir] projektu je [TestEnvironment][test-environment.cs] klasa koja
 učitava demo certifikat koji nije uključen u projekt; moguće je
-- specificirati OIB, putanju do certifikata (.pfx), lozinku i/ili
-- kreirati _DemoCertificate.txt_ sa linijama
-    - demo OIB poslovnog subjekta
-    - lozinka certifikata
-    - certifikat poslovnog subjekta kao _base64_ enkodirani string
+- u source-u specificirati OIB, putanju do certifikata (.pfx), lozinku i/ili
+- postaviti `FIS_OIB`, `CERT_BASE64` i `CERT_PWD` _environment_ varijable
+```
+SET FIS_OIB=<OIB poslovnog subjekta>
+SET CERT_BASE64=<certifikat poslovnog subjekta kao base64 enkodirani string>
+SET CERT_PWD=<lozinka certifikata>
+
+start Fiscalization.sln
+```    
 
 ## License
 

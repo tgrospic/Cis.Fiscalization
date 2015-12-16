@@ -10,17 +10,18 @@ using System.Security.Cryptography.X509Certificates;
 
 namespace FiscalizationTest
 {
-	// DEMO OIB and certificate is not included in project source code (DemoCertificate.txt)
-	// You can paste your OIB and certificate (file name or string)
-	// or/and add DemoCertificate.txt with
-	// 1. OIB
-	// 2. certificate password
-	// 3. certificate as base64 encoded string
+	// DEMO OIB and certificate is not included in project source code
+	// You can paste your OIB and certificate (file name or base64 string)
+	// or/and set environment variables
+	// > SET FIS_OIB=<oib>
+	// > SET CERT_BASE64=<base64 encoded certificate>
+	// > SET CERT_PWD=<certificate password>
+	// > start Fiscalization.sln
 	public class TestEnvironment
 	{
 		public string Oib = null; // "92328306173"
 		public string CertificateFileName = null; // "DemoCertificate.pfx" or
-		public string CertificateString = null; // base64 encoded certificate
+		public string CertificateBase64 = null; // base64 encoded certificate
 		public string CertificatePassword = null;
 
 		public X509Certificate2 Certificate = null;
@@ -37,29 +38,27 @@ namespace FiscalizationTest
 
 		public void LoadCertificateData()
 		{
-			var demoInfoFileName = "DemoCertificate.txt";
-
-			if (File.Exists(demoInfoFileName))
-			{
-				var lines = File.ReadAllLines(demoInfoFileName);
-
-				// Fun with λ :)
-				AssignEach(lines,
-					() => this.Oib,
-					() => this.CertificatePassword,
-					() => this.CertificateString
-				);
-			}
+			// Fun with λ :)
+			AssignEnvironment(new[]
+				{
+				"FIS_OIB",
+				"CERT_BASE64",
+				"CERT_PWD"
+				},
+				() => this.Oib,
+				() => this.CertificateBase64,
+				() => this.CertificatePassword
+			);
 
 			if (this.CertificateFileName != null)
 			{
 				// Get certificate from file
 				this.Certificate = new X509Certificate2(this.CertificateFileName, this.CertificatePassword);
 			}
-			else if (this.CertificateString != null)
+			else if (this.CertificateBase64 != null)
 			{
 				// Get certificate from string
-				var raw = Convert.FromBase64String(this.CertificateString);
+				var raw = Convert.FromBase64String(this.CertificateBase64);
 				this.Certificate = new X509Certificate2(raw, this.CertificatePassword);
 			}
 		}
@@ -122,16 +121,16 @@ namespace FiscalizationTest
 
 		#region Helpers
 
-		void AssignEach(string[] lines, params Expression<Func<string>>[] fieldSelectors)
+		void AssignEnvironment(string[] envNames, params Expression<Func<string>>[] fieldSelectors)
 		{
-			ZipIter(lines, fieldSelectors, (line, selector) =>
+			ZipIter(envNames, fieldSelectors, (name, selector) =>
 			{
 				var exp = (MemberExpression)selector.Body;
 				var fieldTy = (FieldInfo)exp.Member;
 				var propVal = (string)fieldTy.GetValue(this);
 
 				if (string.IsNullOrEmpty(propVal))
-					fieldTy.SetValue(this, line);
+					fieldTy.SetValue(this, Environment.GetEnvironmentVariable(name));
 			});
 		}
 

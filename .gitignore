@@ -7,6 +7,6 @@ bin
 nuget.exe
 /TestResults
 
-DemoCertificate.txt
 docs/*.html
 README.html
+/*.cmd
