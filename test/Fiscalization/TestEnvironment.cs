@@ -5,6 +5,8 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Net;
+using System.Net.Security;
 using System.Reflection;
 using System.Security.Cryptography.X509Certificates;
 
@@ -27,6 +29,12 @@ namespace FiscalizationTest
 		public X509Certificate2 Certificate = null;
 
 		private TestEnvironment() { }
+
+		static TestEnvironment()
+		{
+			// Unconditionally trust the server certificate
+			ServicePointManager.ServerCertificateValidationCallback = new RemoteCertificateValidationCallback((sender, cert, chain, sslPolicyErrors) => true);
+		}
 
 		public static TestEnvironment Create()
 		{
