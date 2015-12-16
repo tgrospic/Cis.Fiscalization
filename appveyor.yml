@@ -1,0 +1,7 @@
+version: 1.2.0.{build}
+environment:
+  matrix:
+  - SOLUTION: Fiscalization.sln
+  - SOLUTION: FiscalizationCom.sln
+build_script:
+- cmd: msbuild %SOLUTION% /verbosity:quiet

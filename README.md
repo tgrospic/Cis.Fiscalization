@@ -1,6 +1,7 @@
 # Fiskalizacija API (CIS)
 
 [![cis version][cis-version-image]][porezna-spec]
+[![build status][ci-status-image]][ci-url]
 [![nuget downloads][nuget-downloads-image]][nuget-url]
 
 .NET (C#) wrapper oko generiranog SOAP klijenta za pozivanje fiskalizacijskog servisa porezne uprave (CIS v1.2).
@@ -179,6 +180,8 @@ start Fiscalization.sln
 [test-environment.cs]: ./test/Fiscalization/TestEnvironment.cs
 [license]: ./LICENSE
 
+[ci-status-image]: https://ci.appveyor.com/api/projects/status/gumgktf8bs0r4xsm?svg=true
+[ci-url]: https://ci.appveyor.com/project/tgrospic/cis-fiscalization
 [wsdl.exe]: https://msdn.microsoft.com/en-us/library/7h3ystb6(VS.80).aspx
 [porezna-spec]: http://www.porezna-uprava.hr/HR_Fiskalizacija/Stranice/Tehni%C4%8Dke-specifikacije.aspx
 [nuget-url]: http://nuget.org/packages/Cis.Fiscalization
