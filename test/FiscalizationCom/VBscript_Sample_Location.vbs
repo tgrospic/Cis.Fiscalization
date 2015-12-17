@@ -7,16 +7,16 @@ cisInterop.LogFileName = "Fiscal.log"
 
 ' Demo OIB & certificate
 Set objFSO = CreateObject("Scripting.FileSystemObject")
-Set objFile = objFSO.OpenTextFile("DemoCertificate.txt", 1)
+Set env = WScript.CreateObject("WScript.Shell").Environment("PROCESS")
 
 Dim oib
-oib = objFile.ReadLine
+oib = env("FIS_OIB")
 
 Dim certPwd
-certPwd = objFile.ReadLine
+certPwd = env("CERT_PWD")
 
 Dim certBase64
-certBase64 = objFile.ReadLine
+certBase64 = env("CERT_BASE64")
 
 ' Get certificate from file or base64 encoded string
 Dim cert

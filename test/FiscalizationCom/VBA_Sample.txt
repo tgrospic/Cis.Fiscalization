@@ -7,16 +7,12 @@
     cisInterop.LogFileName = CurrentProject.Path + "\Fiscal.log"
 
     ' Demo OIB & certificate
-    Dim FileNum As Long
-    FileNum = FreeFile
-    Close FileNum
-    Open CurrentProject.Path + "\DemoCertificate.txt" For Input As FileNum
-    Dim oib
-    Line Input #FileNum, oib
+    Dim oib As String
+    oib = Environ("FIS_OIB")
     Dim certPwd
-    Line Input #FileNum, certPwd
+    certPwd = Environ("CERT_PWD")
     Dim certBase64
-    Line Input #FileNum, certBase64
+    certBase64 = Environ("CERT_BASE64")
 
     ' Get certificate from file or base64 encoded string
     Dim cert
