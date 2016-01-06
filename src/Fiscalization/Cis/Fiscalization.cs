@@ -492,8 +492,8 @@ namespace Cis
 		/// <returns></returns>
 		protected override XmlWriter GetWriterForMessage(System.Web.Services.Protocols.SoapClientMessage message, int bufferSize)
 		{
-			this._writeStream = new SpyStream(message.Stream);
-			var wr = XmlWriter.Create(this._writeStream);
+			_writeStream = new SpyStream(message.Stream);
+			var wr = XmlWriter.Create(_writeStream);
 
 			return wr;
 		}
@@ -513,13 +513,9 @@ namespace Cis
 			docResponse.Load(reader);
 
 			// Check signature
-			if (this.CheckResponseSignature)
+			if (CheckResponseSignature)
 			{
-				var doc = new XmlDocument();
-				doc.PreserveWhitespace = true;
-				doc.LoadXml(docResponse.OuterXml);
-
-				var isValid = Fiscalization.CheckSignatureXml(doc);
+				var isValid = Fiscalization.CheckSignatureXml(docResponse);
 				if (!isValid)
 					throw new ApplicationException("Soap response signature not valid.");
 			}
@@ -527,11 +523,11 @@ namespace Cis
 			// Read request XML
 			var docRequest = new XmlDocument();
 			docRequest.PreserveWhitespace = true;
-			this._writeStream.Seek(0, SeekOrigin.Begin);
-			docRequest.Load(this._writeStream);
+			_writeStream.Seek(0, SeekOrigin.Begin);
+			docRequest.Load(_writeStream);
 
 			// Log response
-			this.LogResponseRaw(docRequest, docResponse);
+			LogResponseRaw(docRequest, docResponse);
 
 			return XmlReader.Create(new StringReader(docResponse.InnerXml));
 		}
@@ -544,27 +540,27 @@ namespace Cis
 		/// </summary>
 		class SpyStream : MemoryStream
 		{
-			Stream writeStream = null;
-			long lastPosition = 0;
+			Stream _writeStream = null;
+			long _lastPosition = 0;
 
 			public SpyStream(Stream writeStream)
 			{
-				this.writeStream = writeStream;
+				_writeStream = writeStream;
 			}
 
 			public override void Flush()
 			{
-				var position = this.Position;
+				var position = Position;
 
 				// Write to underlying stream
-				this.Seek(lastPosition, SeekOrigin.Begin);
+				Seek(_lastPosition, SeekOrigin.Begin);
 				var br = new BinaryReader(this);
 
-				var count = position - lastPosition;
+				var count = position - _lastPosition;
 				var result = br.ReadBytes((int)count);
-				writeStream.Write(result, 0, (int)count);
+				_writeStream.Write(result, 0, (int)count);
 
-				lastPosition = this.Position;
+				_lastPosition = Position;
 
 				base.Flush();
 		}
@@ -573,7 +569,7 @@ namespace Cis
 			{
 				base.Close();
 
-				this.writeStream.Close();
+				_writeStream.Close();
 			}
 		}
 

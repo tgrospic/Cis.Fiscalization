@@ -11,12 +11,12 @@ namespace Cis
 	{
 		public string LogFileName { get; set; }
 
-		private object _locker = new object();
+		object _locker = new object();
 
 		partial void LogResponseRaw(XmlDocument request, XmlDocument response)
 		{
 			// File logger
-			if (this.LogFileName != null)
+			if (LogFileName != null)
 			{
 				var sb = new StringBuilder();
 				sb.AppendLine(request.DocumentElement.OuterXml);
@@ -24,7 +24,7 @@ namespace Cis
 
 				lock (_locker)
 				{
-					File.AppendAllText(this.LogFileName, sb.ToString(), Encoding.UTF8);
+					File.AppendAllText(LogFileName, sb.ToString(), Encoding.UTF8);
 				}
 			}
 		}

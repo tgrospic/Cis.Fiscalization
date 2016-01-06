@@ -53,21 +53,21 @@ namespace FiscalizationTest
 				"CERT_BASE64",
 				"CERT_PWD"
 				},
-				() => this.Oib,
-				() => this.CertificateBase64,
-				() => this.CertificatePassword
+				() => Oib,
+				() => CertificateBase64,
+				() => CertificatePassword
 			);
 
-			if (this.CertificateFileName != null)
+			if (CertificateFileName != null)
 			{
 				// Get certificate from file
-				this.Certificate = new X509Certificate2(this.CertificateFileName, this.CertificatePassword);
+				Certificate = new X509Certificate2(CertificateFileName, CertificatePassword);
 			}
-			else if (this.CertificateBase64 != null)
+			else if (CertificateBase64 != null)
 			{
 				// Get certificate from string
-				var raw = Convert.FromBase64String(this.CertificateBase64);
-				this.Certificate = new X509Certificate2(raw, this.CertificatePassword);
+				var raw = Convert.FromBase64String(CertificateBase64);
+				Certificate = new X509Certificate2(raw, CertificatePassword);
 			}
 		}
 

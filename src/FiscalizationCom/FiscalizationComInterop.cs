@@ -117,7 +117,7 @@ public class FiscalizationComInterop
 			fs.CheckResponseSignature = checkResponseSignature;
 
 			// Logging
-			fs.LogFileName = this.LogFileName;
+			fs.LogFileName = LogFileName;
 		};
 	}
 
