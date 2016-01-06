@@ -550,26 +550,28 @@ namespace Cis
 
 			public override void Flush()
 			{
-				var position = Position;
+				Seek(_lastPosition, SeekOrigin.Begin);
 
 				// Write to underlying stream
-				Seek(_lastPosition, SeekOrigin.Begin);
-				var br = new BinaryReader(this);
-
-				var count = position - _lastPosition;
-				var result = br.ReadBytes((int)count);
-				_writeStream.Write(result, 0, (int)count);
+				CopyTo_(_writeStream);
 
 				_lastPosition = Position;
-
-				base.Flush();
-		}
+			}
 
 			public override void Close()
 			{
 				base.Close();
 
 				_writeStream.Close();
+			}
+
+			// If isn't .NET4
+			void CopyTo_(Stream destination, int bufferSize = 4096)
+			{
+				byte[] buffer = new byte[bufferSize];
+				int read;
+				while ((read = Read(buffer, 0, buffer.Length)) != 0)
+					destination.Write(buffer, 0, read);
 			}
 		}
 
