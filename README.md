@@ -2,7 +2,7 @@
 
 [![cis version][cis-version-image]][porezna-spec]
 [![build status][ci-status-image]][ci-url]
-[![nuget downloads][nuget-downloads-image]][nuget-url]
+[![nuget version][nuget-version-image]][nuget-url]
 
 .NET (C#) wrapper oko generiranog SOAP klijenta za pozivanje fiskalizacijskog servisa porezne uprave (CIS v1.2).
 
@@ -185,6 +185,6 @@ start Fiscalization.sln
 [wsdl.exe]: https://msdn.microsoft.com/en-us/library/7h3ystb6(VS.80).aspx
 [porezna-spec]: http://www.porezna-uprava.hr/HR_Fiskalizacija/Stranice/Tehni%C4%8Dke-specifikacije.aspx
 [nuget-url]: http://nuget.org/packages/Cis.Fiscalization
-[nuget-downloads-image]: https://img.shields.io/nuget/dt/Cis.Fiscalization.svg
+[nuget-version-image]: https://img.shields.io/nuget/v/Cis.Fiscalization.svg
 [nuget-screenshot]: ./docs/nuget_screenshot.png
 [fina-demo-2014]: http://www.fina.hr/Default.aspx?sec=1730
