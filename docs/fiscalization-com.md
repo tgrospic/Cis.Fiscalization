@@ -31,6 +31,8 @@ REM x64
 
 ## API
 
+**Napomena**: od verzije `v1.2.0` postoje dvije nove metode za jednostavnije slanje koje automatski kreiraju zahtjev. Sve ostalo je isto kao i kod verzije `v1.1.0`.
+
 Ovdje je kompletan [COM API][com-api].
 Metode za poziv servisa i pomoćne metode su prilagođene za pozive preko COM-a sa __FiscalizationComInterop__ klasom.
 Svejedno je jel se koristi uvijek ista instanca ili se za svaki poziv kreira nova.
@@ -39,14 +41,20 @@ Svejedno je jel se koristi uvijek ista instanca ili se za svaki poziv kreira nov
 ' .NET COM Interop
 Dim cisInterop As New FiscalizationComInterop
 
-' Slanje računa
+' Slanje računa (od v1.2.0)
 Set result = cisInterop.SendInvoice(RacunType, (X509Certificate2), timeout/ms: Int, isDemo: Bool, check_response_signature: Bool)
 
-' Slanje poslovnog prostora
+' Slanje poslovnog prostora (od v1.2.0)
 Set result = cisInterop.SendLocation(PoslovniProstorType, (X509Certificate2), timeout/ms: Int, isDemo: Bool, check_response_signature: Bool)
 
+' Slanje računa (zahtjev)
+Set result = cisInterop.SendInvoiceRequest(RacunZahtjev, (X509Certificate2), timeout/ms: Int, isDemo: Bool, check_response_signature: Bool)
+
+' Slanje poslovnog prostora (zahtjev)
+Set result = cisInterop.SendLocationRequest(PoslovniProstorZahtjev, (X509Certificate2), timeout/ms: Int, isDemo: Bool, check_response_signature: Bool)
+
 ' Echo
-Set result = cisInteropSendEcho(String, timeout/ms: Int, isDemo: Bool)
+Set result = cisInterop.SendEcho(String, timeout/ms: Int, isDemo: Bool)
 ```
 
 ### Logiranje
@@ -58,7 +66,7 @@ Postavlja se na razini instance __FiscalizationComInterop__ klase.
 ' .NET COM Interop
 Dim cisInterop As New FiscalizationComInterop
 
-' Set logging
+' Postavljanje putanje do log file-a
 cisInterop.LogFileName = "Fiscal.log"
 ```
 
@@ -69,10 +77,10 @@ cisInterop.LogFileName = "Fiscal.log"
 Dim cisInterop
 Set cisInterop = CreateObject("FiscalizationComInterop")
 
-' Set logging
+' Postavljanje putanje do log file-a
 cisInterop.LogFileName = "Fiscal.log"
 
-' Demo OIB & certificate
+' Demo OIB & certifikat
 Set objFSO = CreateObject("Scripting.FileSystemObject")
 Set objFile = objFSO.OpenTextFile("DemoCertificate.txt", 1)
 
@@ -85,13 +93,13 @@ certPwd = objFile.ReadLine
 Dim certBase64
 certBase64 = objFile.ReadLine
 
-' Get certificate from file or base64 encoded string
+' Dohvat certifikata iz file-a ili base64 enkodiranog string-a
 Dim cert
 'Set cert = cisInterop.GetCertificateFile("<certificate file name>.pfx", "<password>")
 Set cert = cisInterop.GetCertificateString(certBase64, certPwd)
 
-' Create invoice number
-Dim invoiceNr' As BrojRacunaType
+' Demo broj računa
+Dim invoiceNr
 Set invoiceNr = CreateObject("Cis.BrojRacunaType")
 With invoiceNr
   .BrOznRac = "1"
@@ -99,7 +107,7 @@ With invoiceNr
   .OznNapUr = "1"
 End With
 
-' Create taxes
+' Demo porez
 Dim pdv25
 Set pdv25 = CreateObject("Cis.PorezType")
 With pdv25
@@ -110,8 +118,8 @@ End With
 Dim taxes(1)
 Set taxes(0) = pdv25
 
-' Create Racun
-Dim invoice
+' Kreiranje računa (RacunType objekt) 
+Dim invoice 'As RacunType
 Set invoice = CreateObject("Cis.RacunType")
 With invoice
   .OIB = oib
@@ -127,24 +135,33 @@ With invoice
   .Pdv = cisInterop.ToPorezTypeArray((taxes))
 End With
 
-' Send invoice
+' Slanje računa (od v1.2.0)
 Dim result 'As RacunOdgovor
 Set result = cisInterop.SendInvoice((invoice), (cert), 0, True)
 
-' invoice.ZastKod <- filled with generated ZKI code - optional
-Call cisInterop.GenerateZki((invoice), (cert))
+MsgBox (result.Jir)
 
-Dim request' As RacunZahtjev
+' -------------------------------------------------------------
+
+' Drugi način za slanje je ručno kreiranje zahtjeva
+
+' Kreiranje zahtjeva računa
+Dim request 'As RacunZahtjev
 Set request = cisInterop.CreateInvoiceRequest((invoice))
-  
-' Call GenerateZki and Sign request - optional
-Call cisInterop.Sign((request), (cert))
-  
-' Send request
+
+' Slanje zahtjeva i računa 
 Dim result 'As RacunOdgovor
 Set result = cisInterop.SendInvoiceRequest((request), (cert), 0, True)
+
+' -------------------------------------------------------------
+
+' Pomoćne funkcije koje se automatski pozivaju kod slanja računa
+
+' Generira ZKI broj i sprema u `invoice.ZastKod` 
+Call cisInterop.GenerateZki((invoice), (cert))
   
-MsgBox (result.Jir)
+' Generira ZKI ako već nije i potpisuje zahtjev
+Call cisInterop.Sign((request), (cert))
 ```
 
 [release-latest]: https://github.com/tgrospic/Cis.Fiscalization/releases/tag/v1.2.0
