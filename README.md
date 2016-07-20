@@ -4,7 +4,7 @@
 [![build status][ci-status-image]][ci-url]
 [![nuget version][nuget-version-image]][nuget-url]
 
-_**Napomena**: Zbog promjene u minimalnoj verziji TLS enkripcije od `CIS v1.3` ova komponenta zahtjeva **.NET 4.5** za komunikaciju sa serverom.  
+_**Napomena**: Zbog promjene u minimalnoj verziji TLS enkripcije od `CIS v1.3` ova komponenta zahtjeva **.NET 4.5** za komunikaciju sa serverom ([detaljnije](#cis-v13---tls-v11--tls-v12)).  
 Zbog ove promjene izdan je novi release COM komponente `v1.2.1-com`._
 
 .NET (C#) wrapper oko generiranog SOAP klijenta za pozivanje fiskalizacijskog servisa porezne uprave `CIS v1.3`.
@@ -127,6 +127,16 @@ RacunOdgovor response = await Fiscalization.SendInvoiceAsync(invoice, certificat
 });
 ```
 
+## CIS v1.3 - TLS v1.1 & TLS v1.2
+
+Od `CIS v1.3` verzija protokola za enkripciju preko HTTPS-a je `TLS v1.1` ili `TLS v1.2`.
+
+Ova komponenta koristi `System.Net` za komunikaciju u kojoj su ti protokoli podržani od **.NET 4.5** verzije. .NET 4.6 ima default postavljenu verziju TLS 1.2 dok .NET 4.5 nema pa se to može napraviti na sljedeći način:
+
+```cs
+ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
+```
+
 ## Logiranje raw SOAP poruka
 
 Logiranje se radi preko implementacije partial metode na __FiskalizacijaService__ klasi.
@@ -174,7 +184,7 @@ start Fiscalization.sln
 
 [docs-com]: ./docs/fiscalization-com.md
 [docs-com-api]: ./docs/fiscalization-com-api.md
-[cis-version-image]: https://cdn.rawgit.com/tgrospic/Cis.Fiscalization/master/docs/cis-service-version.svg
+[cis-version-image]: https://cdn.rawgit.com/tgrospic/Cis.Fiscalization/master/docs/cis-service-version.svg?v1.3
 [fiscalization.cs]: ./src/Fiscalization/Cis/Fiscalization.cs
 [fiscalization-async.cs]: ./src/Fiscalization/Cis/Fiscalization.Async.cs
 [fiscalization-service.cs]: ./src/Fiscalization/Cis/FiskalizacijaService.cs
