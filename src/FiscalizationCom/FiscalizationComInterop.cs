@@ -1,10 +1,17 @@
 ﻿using Cis;
 using System;
 using System.Linq;
+using System.Net;
 using System.Security.Cryptography.X509Certificates;
 
 public class FiscalizationComInterop
 {
+	static FiscalizationComInterop() {
+		// Explicitly set TLS security protocol (from .NET 4.5 TLS1.1 & TLS1.2)
+		// Specified in CIS 1.3 `3.2 Sigurnosni preduvjeti` min. TLS1.1 | TLS1.2
+		ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
+	}
+
 	#region Properties
 
 	public string LogFileName { get; set; }
