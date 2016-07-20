@@ -21,9 +21,9 @@ Download [FiscalizationCom][release-latest] ([zip][download-com]) u kojem je
 
 ```bat
 REM x86
-%SYSTEMROOT%\Microsoft.NET\Framework\v2.0.50727\RegAsm.exe "%~dp0FiscalizationCom.dll" /codebase /tlb
+%SYSTEMROOT%\Microsoft.NET\Framework\v4.0.30319\RegAsm.exe "%~dp0FiscalizationCom.dll" /codebase /tlb
 REM x64
-%SYSTEMROOT%\Microsoft.NET\Framework64\v2.0.50727\RegAsm.exe "%~dp0FiscalizationCom.dll" /codebase /tlb
+%SYSTEMROOT%\Microsoft.NET\Framework64\v4.0.30319\RegAsm.exe "%~dp0FiscalizationCom.dll" /codebase /tlb
 ```
 - __FiscalizationCom.tlb__ se kreira nakon registracije sa _RegisterCOM.cmd_ skriptom
 - u __VBA__ editoru se referencira _FiscalizationCom.tlb_ file
@@ -164,6 +164,6 @@ Call cisInterop.GenerateZki((invoice), (cert))
 Call cisInterop.Sign((request), (cert))
 ```
 
-[release-latest]: https://github.com/tgrospic/Cis.Fiscalization/releases/tag/v1.2.0
-[download-com]:   https://github.com/tgrospic/Cis.Fiscalization/releases/download/v1.2.0/FiscalizationCom-v1.2.0.zip
+[release-latest]: https://github.com/tgrospic/Cis.Fiscalization/releases/tag/v1.2.1-com
+[download-com]:   https://github.com/tgrospic/Cis.Fiscalization/releases/download/v1.2.1-com/FiscalizationCom-v1.2.1-com.zip
 [com-api]: ./fiscalization-com-api.md

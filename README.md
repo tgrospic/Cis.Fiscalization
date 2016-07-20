@@ -4,14 +4,16 @@
 [![build status][ci-status-image]][ci-url]
 [![nuget version][nuget-version-image]][nuget-url]
 
-.NET (C#) wrapper oko generiranog SOAP klijenta za pozivanje fiskalizacijskog servisa porezne uprave (CIS v1.2).
+_**Napomena**: Zbog promjene u minimalnoj verziji TLS enkripcije od `CIS v1.3` ova komponenta zahtjeva **.NET 4.5** za komunikaciju sa serverom.  
+Zbog ove promjene izdan je novi release COM komponente `v1.2.1-com`._
+
+.NET (C#) wrapper oko generiranog SOAP klijenta za pozivanje fiskalizacijskog servisa porezne uprave `CIS v1.3`.
 
 Sa Microsoft [Wsdl.exe][wsdl.exe] tool-om su generirane proxy klase sa strukturom po WSDL shemi koja je objavljena na stranicama porezne uprave [Tehničke specifikacije][porezna-spec] i koja je uključena u source kôd projekta.  
 Preko generiranog SOAP klijenta [FiskalizacijaService][fiscalization-service.cs] se rade svi SOAP pozivi prema __CIS__ servisu. Kompletna implementacija je u [Fiscalization][fiscalization.cs] klasi sa dodatkom async metoda u [Fiscalization.Async.cs][fiscalization-async.cs] file-u. :smile:
 
 Runtime:
-- .NET 3.5
-- .NET 4.5 (async)
+- **.NET 4.5** (ujedno i minimalna verzija; `CIS v1.3` zahtjeva `TLS v1.1` ili `TLS v1.2` enkripciju)
 
 **Testirano i sa demo certifikatom [Fina okoline 2014/2015][fina-demo-2014].**
 
