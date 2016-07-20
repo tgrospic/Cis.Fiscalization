@@ -13,7 +13,7 @@ Sa Microsoft [Wsdl.exe][wsdl.exe] tool-om su generirane proxy klase sa strukturo
 Preko generiranog SOAP klijenta [FiskalizacijaService][fiscalization-service.cs] se rade svi SOAP pozivi prema __CIS__ servisu. Kompletna implementacija je u [Fiscalization][fiscalization.cs] klasi sa dodatkom async metoda u [Fiscalization.Async.cs][fiscalization-async.cs] file-u. :smile:
 
 Runtime:
-- **.NET 4.5** (ujedno i minimalna verzija; `CIS v1.3` zahtjeva `TLS v1.1` ili `TLS v1.2` enkripciju)
+- **.NET 4.5** (`CIS v1.3` zahtjeva `TLS v1.1` ili `TLS v1.2` HTTPS enkripciju)
 
 **Testirano i sa demo certifikatom [Fina okoline 2014/2015][fina-demo-2014].**
 
@@ -45,7 +45,7 @@ PM> Install-Package Cis.Fiscalization
 
 #### Copy
 
-Dovoljno je iskopirati [FiskalizacijaService.cs][fiscalization-service.cs], [Fiscalization.cs][fiscalization.cs] i/ili [Fiscalization.Async.cs][fiscalization-async.cs] (.NET 4.5).
+Dovoljno je iskopirati [FiskalizacijaService.cs][fiscalization-service.cs], [Fiscalization.cs][fiscalization.cs] i/ili [Fiscalization.Async.cs][fiscalization-async.cs].
 
 ## API
 
