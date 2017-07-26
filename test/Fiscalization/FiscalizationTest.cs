@@ -39,7 +39,7 @@ namespace FiscalizationTest
 		}
 
 		[TestMethod]
-		[ExpectedException(typeof(ApplicationException), "Invalid OIB sent to CIS service.")]
+		[ExpectedException(typeof(Exception), "Invalid OIB sent to CIS service.")]
 		public async Task TestSendInvoiceAsyncInvalid()
 		{
 			// Create demo invoice with invalid OIB, must throw exception (message from GreskaType)
@@ -49,22 +49,27 @@ namespace FiscalizationTest
 		}
 
 		[TestMethod]
-		public async Task TestSendLocationAsync()
+		public async Task TestCheckInvoiceAsync()
 		{
-			PoslovniProstorType location = Demo.Location(Demo.Oib);
+			// Create demo invoice
+			RacunType invoice = Demo.Invoice(Demo.Oib);
 
-			var result = await Fiscalization.SendLocationAsync(location, Demo.Certificate, DemoSetup);
+			// Send demo invoice, fill with JIR
+			var _ = await Fiscalization.SendInvoiceAsync(invoice, Demo.Certificate, DemoSetup);
+
+			var result = await Fiscalization.CheckInvoiceAsync(invoice, Demo.Certificate, DemoSetup);
 
 			Assert.IsNotNull(result, "Result is null.");
 		}
 
 		[TestMethod]
-		[ExpectedException(typeof(ApplicationException), "Invalid OIB sent to CIS service.")]
-		public async Task TestSendLocationAsyncInvalid()
+		[ExpectedException(typeof(Exception), "Check invalid invoice.")]
+		public async Task TestCheckInvoiceAsyncInvalid()
 		{
-			PoslovniProstorType location = Demo.Location("invalid OIB");
+			// Create demo invoice
+			RacunType invoice = Demo.Invoice(Demo.Oib);
 
-			await Fiscalization.SendLocationAsync(location, Demo.Certificate, DemoSetup);
+			var result = await Fiscalization.CheckInvoiceAsync(invoice, Demo.Certificate, DemoSetup);
 		}
 
 		[TestMethod]
@@ -91,7 +96,7 @@ namespace FiscalizationTest
 		}
 
 		[TestMethod]
-		[ExpectedException(typeof(ApplicationException), "Invalid OIB sent to CIS service.")]
+		[ExpectedException(typeof(Exception), "Invalid OIB sent to CIS service.")]
 		public void TestSendInvoiceInvalid()
 		{
 			// Create demo invoice with invalid OIB, must throw exception (message from GreskaType)
@@ -101,22 +106,29 @@ namespace FiscalizationTest
 		}
 
 		[TestMethod]
-		public void TestSendLocation()
+		public void TestCheckInvoice()
 		{
-			PoslovniProstorType location = Demo.Location(Demo.Oib);
+			// Create demo invoice
+			RacunType invoice = Demo.Invoice(Demo.Oib);
 
-			PoslovniProstorOdgovor result = Fiscalization.SendLocation(location, Demo.Certificate, DemoSetup);
+			// Send demo invoice, fill with JIR
+			var _ = Fiscalization.SendInvoice(invoice, Demo.Certificate, DemoSetup);
+
+			// Send invoice for checking
+			var result = Fiscalization.CheckInvoice(invoice, Demo.Certificate, DemoSetup);
 
 			Assert.IsNotNull(result, "Result is null.");
 		}
 
 		[TestMethod]
-		[ExpectedException(typeof(ApplicationException), "Invalid OIB sent to CIS service.")]
-		public void TestSendLocationInvalid()
+		[ExpectedException(typeof(Exception), "Check invalid invoice.")]
+		public void TestCheckInvoiceInvalid()
 		{
-			PoslovniProstorType location = Demo.Location("invalid OIB");
+			// Create demo invoice
+			RacunType invoice = Demo.Invoice(Demo.Oib);
 
-			Fiscalization.SendLocation(location, Demo.Certificate, DemoSetup);
+			// Send invoice for checking
+			var result = Fiscalization.CheckInvoice(invoice, Demo.Certificate, DemoSetup);
 		}
 
 		[TestMethod]

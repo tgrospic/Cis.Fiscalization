@@ -10,3 +10,4 @@ nuget.exe
 docs/*.html
 README.html
 /*.cmd
+/*.ps1

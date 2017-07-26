@@ -3,9 +3,9 @@
   targetNamespace="http://www.apis-it.hr/fin/2012/types/f73"
   xmlns:tns="http://www.apis-it.hr/fin/2012/types/f73"
   xmlns:ds="http://www.w3.org/2000/09/xmldsig#"
-  elementFormDefault="qualified" version="1.2">
+  elementFormDefault="qualified" version="1.3">
 
-  <import namespace="http://www.w3.org/2000/09/xmldsig#" schemaLocation="http://www.w3.org/TR/2002/REC-xmldsig-core-20020212/xmldsig-core-schema.xsd" />
+  <import namespace="http://www.w3.org/2000/09/xmldsig#" schemaLocation="xmldsig-core-schema.xsd" />
 
   <element name="RacunZahtjev">
     <annotation>
@@ -58,49 +58,38 @@
     </complexType>
   </element>
 
-  <element name="PoslovniProstorZahtjev">
-    <annotation>
-      <documentation>
-        Poruka prema web servisu za zaprimanje podataka o poslovnom prostoru.
-      </documentation>
-    </annotation>
-    <complexType>
-      <sequence>
-        <element name="Zaglavlje" type="tns:ZaglavljeType" minOccurs="1" maxOccurs="1" />
-        <element name="PoslovniProstor" type="tns:PoslovniProstorType" minOccurs="1" maxOccurs="1"/>
-        <element ref="ds:Signature" minOccurs="0" maxOccurs="1"/>
-      </sequence>
-      <attribute name="Id" type="string" >
-        <annotation>
-          <documentation>
-            Atribut za potrebe digitalnog potpisa, u njega se stavlja referentni na koji se referencira digitalni potpis.
-          </documentation>
-        </annotation>
-      </attribute>
-    </complexType>
-  </element>
+   <element name="ProvjeraZahtjev">
+		    <annotation>
+		      <documentation>
+		        Poruka prema web servisu za provjeru racuna.
+		      </documentation>
+		    </annotation>
+		    <complexType>
+		      <sequence>
+		        <element name="Zaglavlje" type="tns:ZaglavljeType" minOccurs="1" maxOccurs="1" />
+		        <element name="Racun" type="tns:RacunType" minOccurs="1" maxOccurs="1" />
+		        <element ref="ds:Signature" minOccurs="0" maxOccurs="1" />
+		      </sequence>
+		      <attribute name="Id" type="string" />
+		    </complexType>
+		</element>
 
-  <element name="PoslovniProstorOdgovor">
-    <annotation>
-      <documentation>
-        Odgovor servisa za zaprimanje podataka o poslovnom prostoru.
-      </documentation>
-    </annotation>
-    <complexType>
-      <sequence>
-        <element name="Zaglavlje" type="tns:ZaglavljeOdgovorType" minOccurs="1" maxOccurs="1" />
-        <element name="Greske" type="tns:GreskeType" minOccurs="0" maxOccurs="1" />
-        <element ref="ds:Signature" minOccurs="0" maxOccurs="1"/>
-      </sequence>
-      <attribute name="Id" type="string" >
-        <annotation>
-          <documentation>
-            Atribut za potrebe digitalnog potpisa, u njega se stavlja referentni na koji se referencira digitalni potpis.
-          </documentation>
-        </annotation>
-      </attribute>
-    </complexType>
-  </element>
+		<element name="ProvjeraOdgovor">
+		    <annotation>
+		      <documentation>
+		        Odgovor servisa za provjeru racuna.
+		      </documentation>
+		    </annotation>
+		    <complexType>
+		      <sequence>
+		        <element name="Zaglavlje" type="tns:ZaglavljeOdgovorType" minOccurs="1" maxOccurs="1" />
+		         <element name="Racun" type="tns:RacunType" minOccurs="1" maxOccurs="1" />
+		        <element name="Greske" type="tns:GreskeType" minOccurs="0" maxOccurs="1" />
+		        <element ref="ds:Signature" minOccurs="0" maxOccurs="1" />
+		      </sequence>
+		      <attribute name="Id" type="string" />
+		    </complexType>
+		</element>
 
   <element name="EchoRequest" type="string" nillable="false">
     <annotation>
@@ -350,76 +339,6 @@
     </sequence>
   </complexType>
 
-  <complexType name="PoslovniProstorType">
-    <sequence>
-      <element name="Oib" type="tns:OibType" minOccurs="1" maxOccurs="1" >
-        <annotation>
-          <documentation>
-            Osobni identifikacijski broj obveznika fiskalizacije.
-          </documentation>
-        </annotation>
-      </element>
-      <element name="OznPoslProstora" type="tns:OznPoslProstoraType" minOccurs="1" maxOccurs="1" >
-        <annotation>
-          <documentation>
-            Oznaka poslovnog prostora.
-          </documentation>
-        </annotation>
-      </element>
-      <element name="AdresniPodatak" type="tns:AdresniPodatakType" minOccurs="1" maxOccurs="1" >
-        <annotation>
-          <documentation>
-            Adresa ili opis poslovnog prostora ( npr. internet trgovina ) kada poslovni prostor nema adresu.
-          </documentation>
-        </annotation>
-      </element>
-      <element name="RadnoVrijeme" minOccurs="1" maxOccurs="1">
-        <annotation>
-          <documentation>
-            Radno vrijeme poslovnog prostora, slobodan unos.
-          </documentation>
-        </annotation>
-        <simpleType>
-          <restriction base="string">
-            <minLength value="1" />
-            <maxLength value="1000" />
-          </restriction>
-        </simpleType>
-      </element>
-      <element name="DatumPocetkaPrimjene" type="tns:DatumType" minOccurs="1" maxOccurs="1">
-        <annotation>
-          <documentation>
-            Datum otkad vrijedi promjena.
-          </documentation>
-        </annotation>
-      </element>
-      <element name="OznakaZatvaranja" type="tns:OznakaZatvaranjaType" minOccurs="0" maxOccurs="1" >
-        <annotation>
-          <documentation>
-            Samo u slucaju da se zatvara poslovni prostor. Nakon zatvaranja poslovnog prostora ne smiju se vise prijavljivati racuni
-            s oznakom tog poslovnog prostora.
-          </documentation>
-        </annotation>
-      </element>
-      <element name="SpecNamj" minOccurs="0" maxOccurs="1">
-        <annotation>
-          <documentation>
-				Potrebno je dostaviti jedan od podataka u nastavku:
-					- OIB pravne ili fizicke osobe koja je proizvela programsko rjesenje ili
-					- OIB pravne ili fizicke osobe koja odrzava programsko rjesenje ili
-					- OIB pravne ili fizicke osobe prodavatelja u slucaju da se koristi rjesenje od stranog proizvodaca – bez lokalnog partnera
-          </documentation>
-        </annotation>
-        <simpleType>
-          <restriction base="string">
-            <minLength value="1" />
-            <maxLength value="1000" />
-          </restriction>
-        </simpleType>
-      </element>
-    </sequence>
-  </complexType>
-
   <simpleType name="OznakaSlijednostiType">
     <annotation>
       <documentation>
@@ -432,47 +351,10 @@
     </restriction>
   </simpleType>
 
-  <simpleType name="OznakaZatvaranjaType">
-    <restriction base="string">
-      <enumeration value="Z"/>
-    </restriction>
-  </simpleType>
-
-  <complexType name="AdresniPodatakType">
-    <choice>
-      <element name="Adresa" type="tns:AdresaType">
-        <annotation>
-          <documentation>
-            Adresa poslovnog prostora.
-          </documentation>
-        </annotation>
-      </element>
-      <element name="OstaliTipoviPP" type="tns:String100Type">
-        <annotation>
-          <documentation>
-            Ostali tipovi poslovnog prostora.
-            Predvidjen je slobodan unos za specificne slucajeve kada ne postoji adresa poslovnog prostora (internet trgovina, pokretna trgovina i sl.).
-          </documentation>
-        </annotation>
-      </element>
-    </choice>
-  </complexType>
-
   <complexType name="GreskeType">
     <sequence>
       <element name="Greska" type="tns:GreskaType" minOccurs="1"
         maxOccurs="unbounded" />
-    </sequence>
-  </complexType>
-
-  <complexType name="AdresaType">
-    <sequence>
-      <element name="Ulica" minOccurs="0" maxOccurs="1" type="tns:String100Type"/>
-      <element name="KucniBroj" minOccurs="0" maxOccurs="1" type="tns:String4BrojType"/>
-      <element name="KucniBrojDodatak" minOccurs="0" maxOccurs="1" type="tns:String4Type"/>
-      <element name="BrojPoste" minOccurs="0" maxOccurs="1" type="tns:String12BrojType"/>
-      <element name="Naselje" minOccurs="0" maxOccurs="1" type="tns:String35Type"/>
-      <element name="Opcina" minOccurs="0" maxOccurs="1" type="tns:String35Type"/>
     </sequence>
   </complexType>
 

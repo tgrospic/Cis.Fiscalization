@@ -1,6 +1,6 @@
-// Cis.Fiscalization v1.2.0 :: CIS v1.2 (2012-2015)
+// Cis.Fiscalization v1.3.0 :: CIS WSDL v1.4 (2012-2017)
 // https://github.com/tgrospic/Cis.Fiscalization
-// Copyright (c) 2013, 2015 Tomislav Grospic
+// Copyright (c) 2013-present Tomislav Grospic
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 // The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
@@ -21,7 +21,6 @@ namespace Cis
 		/// <param name="request">Request to send</param>
 		/// <param name="certificate">Signing certificate, optional if request is already signed</param>
 		/// <param name="setupService">Function to set service settings</param>
-		/// <returns></returns>
 		public static Task<RacunOdgovor> SendInvoiceRequestAsync(RacunZahtjev request, X509Certificate2 certificate = null,
 			Action<FiskalizacijaService> setupService = null)
 		{
@@ -37,7 +36,6 @@ namespace Cis
 		/// <param name="invoice">Invoice to send</param>
 		/// <param name="certificate">Signing certificate</param>
 		/// <param name="setupService">Function to set service settings</param>
-		/// <returns></returns>
 		public static Task<RacunOdgovor> SendInvoiceAsync(RacunType invoice, X509Certificate2 certificate,
 			Action<FiskalizacijaService> setupService = null)
 		{
@@ -54,42 +52,39 @@ namespace Cis
 		}
 
 		/// <summary>
-		/// Send location request async
+		/// Check invoice request async
 		/// </summary>
 		/// <param name="request">Request to send</param>
 		/// <param name="certificate">Signing certificate, optional if request is already signed</param>
 		/// <param name="setupService">Function to set service settings</param>
-		/// <returns></returns>
-		public static Task<PoslovniProstorOdgovor> SendLocationRequestAsync(PoslovniProstorZahtjev request, X509Certificate2 certificate = null,
+		public static Task<ProvjeraOdgovor> CheckInvoiceRequestAsync(ProvjeraZahtjev request, X509Certificate2 certificate = null,
 			Action<FiskalizacijaService> setupService = null)
 		{
 			if (request == null) throw new ArgumentNullException("request");
-			if (request.PoslovniProstor == null) throw new ArgumentNullException("request.PoslovniProstor");
+			if (request.Racun == null) throw new ArgumentNullException("request.Racun");
 
-			return SignAndSendRequestAsync<PoslovniProstorZahtjev, PoslovniProstorOdgovor>(
-				request, x => x.PoslovniProstorAsync, certificate, setupService);
+			return SignAndSendRequestAsync<ProvjeraZahtjev, ProvjeraOdgovor>(request, x => x.ProvjeraAsync, certificate, setupService);
 		}
 
 		/// <summary>
-		/// Send location async
+		/// Send invoice async
 		/// </summary>
-		/// <param name="location">Location to send</param>
+		/// <param name="invoice">Invoice to check</param>
 		/// <param name="certificate">Signing certificate</param>
 		/// <param name="setupService">Function to set service settings</param>
-		/// <returns></returns>
-		public static Task<PoslovniProstorOdgovor> SendLocationAsync(PoslovniProstorType location, X509Certificate2 certificate,
+		public static Task<ProvjeraOdgovor> CheckInvoiceAsync(RacunType invoice, X509Certificate2 certificate,
 			Action<FiskalizacijaService> setupService = null)
 		{
-			if (location == null) throw new ArgumentNullException("location");
+			if (invoice == null) throw new ArgumentNullException("invoice");
 			if (certificate == null) throw new ArgumentNullException("certificate");
 
-			var request = new PoslovniProstorZahtjev
+			var request = new ProvjeraZahtjev
 			{
-				PoslovniProstor = location,
+				Racun = invoice,
 				Zaglavlje = Cis.Fiscalization.GetRequestHeader()
 			};
 
-			return SendLocationRequestAsync(request, certificate, setupService);
+			return CheckInvoiceRequestAsync(request, certificate, setupService);
 		}
 
 		/// <summary>
@@ -97,7 +92,6 @@ namespace Cis
 		/// </summary>
 		/// <param name="echo">String to send</param>
 		/// <param name="setupService">Function to set service settings</param>
-		/// <returns></returns>
 		public static Task<string> SendEchoAsync(string echo, Action<FiskalizacijaService> setupService = null)
 		{
 			if (echo == null) throw new ArgumentNullException("echo");
@@ -206,9 +200,9 @@ namespace Cis
 			return Task.Factory.FromAsync(Beginracuni, Endracuni, request, null);
 		}
 
-		public Task<PoslovniProstorOdgovor> PoslovniProstorAsync(PoslovniProstorZahtjev request)
+		public Task<ProvjeraOdgovor> ProvjeraAsync(ProvjeraZahtjev request)
 		{
-			return Task.Factory.FromAsync(BeginposlovniProstor, EndposlovniProstor, request, null);
+			return Task.Factory.FromAsync(Beginprovjera, Endprovjera, request, null);
 		}
 
 		public Task<string> EchoAsync(string request)

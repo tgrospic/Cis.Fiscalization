@@ -84,7 +84,7 @@ namespace FiscalizationTest
 					OznNapUr = "1"
 				},
 				DatVrijeme = DateTime.Now.ToString(Fiscalization.DATE_FORMAT_LONG),
-				IznosUkupno = 3.ToString("N2", CultureInfo.InvariantCulture),
+				IznosUkupno = 2.9.ToString("N2", CultureInfo.InvariantCulture),
 				NacinPlac = NacinPlacanjaType.G,
 				NakDost = false,
 				Oib = oib,
@@ -96,32 +96,10 @@ namespace FiscalizationTest
 					{
 						Stopa = 25.ToString("N2", CultureInfo.InvariantCulture),
 						Osnovica = 2.34.ToString("N2", CultureInfo.InvariantCulture),
-						Iznos = 0.59.ToString("N2", CultureInfo.InvariantCulture),
+						Iznos = .56.ToString("N2", CultureInfo.InvariantCulture),
 					}
 				},
 				USustPdv = true
-			};
-		}
-
-		public PoslovniProstorType Location(string oib)
-		{
-			return new PoslovniProstorType()
-			{
-				AdresniPodatak = new AdresniPodatakType
-				{
-					Item = new AdresaType()
-					{
-						Ulica = "Ulica",
-						BrojPoste = "10000",
-						Naselje = "Naselje",
-						Opcina = "Opcina",
-					}
-				},
-				DatumPocetkaPrimjene = DateTime.Now.AddDays(-60).ToString(Fiscalization.DATE_FORMAT_SHORT),
-				Oib = oib,
-				OznPoslProstora = "1",
-				RadnoVrijeme = "radno vrijeme",
-				SpecNamj = "112343454"
 			};
 		}
 

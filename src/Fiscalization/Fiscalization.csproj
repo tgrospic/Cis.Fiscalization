@@ -58,22 +58,18 @@
     <Compile Include="Cis\Fiscalization.Async.cs" />
     <Compile Include="Cis\Fiscalization.cs" />
     <Compile Include="Cis\FiskalizacijaService.cs" />
+    <Content Include="Cis\Generator\Release notes.txt" />
     <Content Include="FiscalizationNugetRuntimeError.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Cis\Generator\GenerateFromWsdl.cmd" />
-    <None Include="Cis\Generator\schema\FiskalizacijaSchema.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Cis\Generator\schema\xmldsig-core-schema.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Cis\Generator\wsdl\FiskalizacijaService.wsdl" />
     <None Include="Fiscalization.nuspec">
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Cis\Generator\schema\" />
+    <Folder Include="Cis\Generator\wsdl\" />
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>

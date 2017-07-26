@@ -31,8 +31,6 @@ REM x64
 
 ## API
 
-**Napomena**: od verzije `v1.2.0` postoje dvije nove metode za jednostavnije slanje koje automatski kreiraju zahtjev. Sve ostalo je isto kao i kod verzije `v1.1.0`.
-
 Ovdje je kompletan [COM API][com-api].
 Metode za poziv servisa i pomoćne metode su prilagođene za pozive preko COM-a sa __FiscalizationComInterop__ klasom.
 Svejedno je jel se koristi uvijek ista instanca ili se za svaki poziv kreira nova.
@@ -41,17 +39,17 @@ Svejedno je jel se koristi uvijek ista instanca ili se za svaki poziv kreira nov
 ' .NET COM Interop
 Dim cisInterop As New FiscalizationComInterop
 
-' Slanje računa (od v1.2.0)
+' Slanje računa
 Set result = cisInterop.SendInvoice(RacunType, (X509Certificate2), timeout/ms: Int, isDemo: Bool, check_response_signature: Bool)
-
-' Slanje poslovnog prostora (od v1.2.0)
-Set result = cisInterop.SendLocation(PoslovniProstorType, (X509Certificate2), timeout/ms: Int, isDemo: Bool, check_response_signature: Bool)
 
 ' Slanje računa (zahtjev)
 Set result = cisInterop.SendInvoiceRequest(RacunZahtjev, (X509Certificate2), timeout/ms: Int, isDemo: Bool, check_response_signature: Bool)
 
-' Slanje poslovnog prostora (zahtjev)
-Set result = cisInterop.SendLocationRequest(PoslovniProstorZahtjev, (X509Certificate2), timeout/ms: Int, isDemo: Bool, check_response_signature: Bool)
+' Provjera računa
+Set result = cisInterop.CheckInvoice(RacunType, (X509Certificate2), timeout/ms: Int, isDemo: Bool, check_response_signature: Bool)
+
+' Provjera računa (zahtjev)
+Set result = cisInterop.CheckInvoiceRequest(RacunZahtjev, (X509Certificate2), timeout/ms: Int, isDemo: Bool, check_response_signature: Bool)
 
 ' Echo
 Set result = cisInterop.SendEcho(String, timeout/ms: Int, isDemo: Bool)
@@ -164,6 +162,6 @@ Call cisInterop.GenerateZki((invoice), (cert))
 Call cisInterop.Sign((request), (cert))
 ```
 
-[release-latest]: https://github.com/tgrospic/Cis.Fiscalization/releases/tag/v1.2.1-com
-[download-com]:   https://github.com/tgrospic/Cis.Fiscalization/releases/download/v1.2.1-com/FiscalizationCom-v1.2.1-com.zip
+[release-latest]: https://github.com/tgrospic/Cis.Fiscalization/releases/latest
+[download-com]:   https://github.com/tgrospic/Cis.Fiscalization/releases/download/v1.3.0/FiscalizationCom-v1.3.0.zip
 [com-api]: ./fiscalization-com-api.md

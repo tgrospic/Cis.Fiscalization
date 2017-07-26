@@ -29,9 +29,9 @@ namespace Cis {
         
         private System.Threading.SendOrPostCallback racuniOperationCompleted;
         
-        private System.Threading.SendOrPostCallback poslovniProstorOperationCompleted;
-        
         private System.Threading.SendOrPostCallback echoOperationCompleted;
+        
+        private System.Threading.SendOrPostCallback provjeraOperationCompleted;
         
         /// <remarks/>
         public FiskalizacijaService() {
@@ -42,10 +42,10 @@ namespace Cis {
         public event racuniCompletedEventHandler racuniCompleted;
         
         /// <remarks/>
-        public event poslovniProstorCompletedEventHandler poslovniProstorCompleted;
+        public event echoCompletedEventHandler echoCompleted;
         
         /// <remarks/>
-        public event echoCompletedEventHandler echoCompleted;
+        public event provjeraCompletedEventHandler provjeraCompleted;
         
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://e-porezna.porezna-uprava.hr/fiskalizacija/2012/services/FiskalizacijaServi" +
@@ -92,49 +92,6 @@ namespace Cis {
         
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://e-porezna.porezna-uprava.hr/fiskalizacija/2012/services/FiskalizacijaServi" +
-            "ce/poslovniProstor", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Bare)]
-        [return: System.Xml.Serialization.XmlElementAttribute("PoslovniProstorOdgovor", Namespace="http://www.apis-it.hr/fin/2012/types/f73")]
-        public PoslovniProstorOdgovor poslovniProstor([System.Xml.Serialization.XmlElementAttribute(Namespace="http://www.apis-it.hr/fin/2012/types/f73")] PoslovniProstorZahtjev PoslovniProstorZahtjev) {
-            object[] results = this.Invoke("poslovniProstor", new object[] {
-                        PoslovniProstorZahtjev});
-            return ((PoslovniProstorOdgovor)(results[0]));
-        }
-        
-        /// <remarks/>
-        public System.IAsyncResult BeginposlovniProstor(PoslovniProstorZahtjev PoslovniProstorZahtjev, System.AsyncCallback callback, object asyncState) {
-            return this.BeginInvoke("poslovniProstor", new object[] {
-                        PoslovniProstorZahtjev}, callback, asyncState);
-        }
-        
-        /// <remarks/>
-        public PoslovniProstorOdgovor EndposlovniProstor(System.IAsyncResult asyncResult) {
-            object[] results = this.EndInvoke(asyncResult);
-            return ((PoslovniProstorOdgovor)(results[0]));
-        }
-        
-        /// <remarks/>
-        public void poslovniProstorAsync(PoslovniProstorZahtjev PoslovniProstorZahtjev) {
-            this.poslovniProstorAsync(PoslovniProstorZahtjev, null);
-        }
-        
-        /// <remarks/>
-        public void poslovniProstorAsync(PoslovniProstorZahtjev PoslovniProstorZahtjev, object userState) {
-            if ((this.poslovniProstorOperationCompleted == null)) {
-                this.poslovniProstorOperationCompleted = new System.Threading.SendOrPostCallback(this.OnposlovniProstorOperationCompleted);
-            }
-            this.InvokeAsync("poslovniProstor", new object[] {
-                        PoslovniProstorZahtjev}, this.poslovniProstorOperationCompleted, userState);
-        }
-        
-        private void OnposlovniProstorOperationCompleted(object arg) {
-            if ((this.poslovniProstorCompleted != null)) {
-                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
-                this.poslovniProstorCompleted(this, new poslovniProstorCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
-            }
-        }
-        
-        /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://e-porezna.porezna-uprava.hr/fiskalizacija/2012/services/FiskalizacijaServi" +
             "ce/echo", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Bare)]
         [return: System.Xml.Serialization.XmlElementAttribute("EchoResponse", Namespace="http://www.apis-it.hr/fin/2012/types/f73")]
         public string echo([System.Xml.Serialization.XmlElementAttribute(Namespace="http://www.apis-it.hr/fin/2012/types/f73")] string EchoRequest) {
@@ -173,6 +130,49 @@ namespace Cis {
             if ((this.echoCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
                 this.echoCompleted(this, new echoCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+            }
+        }
+        
+        /// <remarks/>
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://e-porezna.porezna-uprava.hr/fiskalizacija/2012/services/FiskalizacijaServi" +
+            "ce/provjera", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Bare)]
+        [return: System.Xml.Serialization.XmlElementAttribute("ProvjeraOdgovor", Namespace="http://www.apis-it.hr/fin/2012/types/f73")]
+        public ProvjeraOdgovor provjera([System.Xml.Serialization.XmlElementAttribute(Namespace="http://www.apis-it.hr/fin/2012/types/f73")] ProvjeraZahtjev ProvjeraZahtjev) {
+            object[] results = this.Invoke("provjera", new object[] {
+                        ProvjeraZahtjev});
+            return ((ProvjeraOdgovor)(results[0]));
+        }
+        
+        /// <remarks/>
+        public System.IAsyncResult Beginprovjera(ProvjeraZahtjev ProvjeraZahtjev, System.AsyncCallback callback, object asyncState) {
+            return this.BeginInvoke("provjera", new object[] {
+                        ProvjeraZahtjev}, callback, asyncState);
+        }
+        
+        /// <remarks/>
+        public ProvjeraOdgovor Endprovjera(System.IAsyncResult asyncResult) {
+            object[] results = this.EndInvoke(asyncResult);
+            return ((ProvjeraOdgovor)(results[0]));
+        }
+        
+        /// <remarks/>
+        public void provjeraAsync(ProvjeraZahtjev ProvjeraZahtjev) {
+            this.provjeraAsync(ProvjeraZahtjev, null);
+        }
+        
+        /// <remarks/>
+        public void provjeraAsync(ProvjeraZahtjev ProvjeraZahtjev, object userState) {
+            if ((this.provjeraOperationCompleted == null)) {
+                this.provjeraOperationCompleted = new System.Threading.SendOrPostCallback(this.OnprovjeraOperationCompleted);
+            }
+            this.InvokeAsync("provjera", new object[] {
+                        ProvjeraZahtjev}, this.provjeraOperationCompleted, userState);
+        }
+        
+        private void OnprovjeraOperationCompleted(object arg) {
+            if ((this.provjeraCompleted != null)) {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+                this.provjeraCompleted(this, new provjeraCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
         
@@ -272,226 +272,6 @@ namespace Cis {
                 this.datumVrijemeField = value;
             }
         }
-    }
-    
-    /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "4.6.81.0")]
-    [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.apis-it.hr/fin/2012/types/f73")]
-    public partial class AdresaType {
-        
-        private string ulicaField;
-        
-        private string kucniBrojField;
-        
-        private string kucniBrojDodatakField;
-        
-        private string brojPosteField;
-        
-        private string naseljeField;
-        
-        private string opcinaField;
-        
-        /// <remarks/>
-        public string Ulica {
-            get {
-                return this.ulicaField;
-            }
-            set {
-                this.ulicaField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public string KucniBroj {
-            get {
-                return this.kucniBrojField;
-            }
-            set {
-                this.kucniBrojField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public string KucniBrojDodatak {
-            get {
-                return this.kucniBrojDodatakField;
-            }
-            set {
-                this.kucniBrojDodatakField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public string BrojPoste {
-            get {
-                return this.brojPosteField;
-            }
-            set {
-                this.brojPosteField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public string Naselje {
-            get {
-                return this.naseljeField;
-            }
-            set {
-                this.naseljeField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public string Opcina {
-            get {
-                return this.opcinaField;
-            }
-            set {
-                this.opcinaField = value;
-            }
-        }
-    }
-    
-    /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "4.6.81.0")]
-    [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.apis-it.hr/fin/2012/types/f73")]
-    public partial class AdresniPodatakType {
-        
-        private object itemField;
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("Adresa", typeof(AdresaType))]
-        [System.Xml.Serialization.XmlElementAttribute("OstaliTipoviPP", typeof(string))]
-        public object Item {
-            get {
-                return this.itemField;
-            }
-            set {
-                this.itemField = value;
-            }
-        }
-    }
-    
-    /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "4.6.81.0")]
-    [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.apis-it.hr/fin/2012/types/f73")]
-    public partial class PoslovniProstorType {
-        
-        private string oibField;
-        
-        private string oznPoslProstoraField;
-        
-        private AdresniPodatakType adresniPodatakField;
-        
-        private string radnoVrijemeField;
-        
-        private string datumPocetkaPrimjeneField;
-        
-        private OznakaZatvaranjaType oznakaZatvaranjaField;
-        
-        private bool oznakaZatvaranjaFieldSpecified;
-        
-        private string specNamjField;
-        
-        /// <remarks/>
-        public string Oib {
-            get {
-                return this.oibField;
-            }
-            set {
-                this.oibField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public string OznPoslProstora {
-            get {
-                return this.oznPoslProstoraField;
-            }
-            set {
-                this.oznPoslProstoraField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public AdresniPodatakType AdresniPodatak {
-            get {
-                return this.adresniPodatakField;
-            }
-            set {
-                this.adresniPodatakField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public string RadnoVrijeme {
-            get {
-                return this.radnoVrijemeField;
-            }
-            set {
-                this.radnoVrijemeField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public string DatumPocetkaPrimjene {
-            get {
-                return this.datumPocetkaPrimjeneField;
-            }
-            set {
-                this.datumPocetkaPrimjeneField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public OznakaZatvaranjaType OznakaZatvaranja {
-            get {
-                return this.oznakaZatvaranjaField;
-            }
-            set {
-                this.oznakaZatvaranjaField = value;
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool OznakaZatvaranjaSpecified {
-            get {
-                return this.oznakaZatvaranjaFieldSpecified;
-            }
-            set {
-                this.oznakaZatvaranjaFieldSpecified = value;
-            }
-        }
-        
-        /// <remarks/>
-        public string SpecNamj {
-            get {
-                return this.specNamjField;
-            }
-            set {
-                this.specNamjField = value;
-            }
-        }
-    }
-    
-    /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "4.6.81.0")]
-    [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.apis-it.hr/fin/2012/types/f73")]
-    public enum OznakaZatvaranjaType {
-        
-        /// <remarks/>
-        Z,
     }
     
     /// <remarks/>
@@ -2092,11 +1872,11 @@ namespace Cis {
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.apis-it.hr/fin/2012/types/f73")]
-    public partial class PoslovniProstorZahtjev {
+    public partial class ProvjeraZahtjev {
         
         private ZaglavljeType zaglavljeField;
         
-        private PoslovniProstorType poslovniProstorField;
+        private RacunType racunField;
         
         private SignatureType signatureField;
         
@@ -2113,12 +1893,12 @@ namespace Cis {
         }
         
         /// <remarks/>
-        public PoslovniProstorType PoslovniProstor {
+        public RacunType Racun {
             get {
-                return this.poslovniProstorField;
+                return this.racunField;
             }
             set {
-                this.poslovniProstorField = value;
+                this.racunField = value;
             }
         }
         
@@ -2151,9 +1931,11 @@ namespace Cis {
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.apis-it.hr/fin/2012/types/f73")]
-    public partial class PoslovniProstorOdgovor {
+    public partial class ProvjeraOdgovor {
         
         private ZaglavljeOdgovorType zaglavljeField;
+        
+        private RacunType racunField;
         
         private GreskaType[] greskeField;
         
@@ -2168,6 +1950,16 @@ namespace Cis {
             }
             set {
                 this.zaglavljeField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public RacunType Racun {
+            get {
+                return this.racunField;
+            }
+            set {
+                this.racunField = value;
             }
         }
         
@@ -2233,32 +2025,6 @@ namespace Cis {
     
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "4.6.81.0")]
-    public delegate void poslovniProstorCompletedEventHandler(object sender, poslovniProstorCompletedEventArgs e);
-    
-    /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "4.6.81.0")]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    public partial class poslovniProstorCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
-        private object[] results;
-        
-        internal poslovniProstorCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-                base(exception, cancelled, userState) {
-            this.results = results;
-        }
-        
-        /// <remarks/>
-        public PoslovniProstorOdgovor Result {
-            get {
-                this.RaiseExceptionIfNecessary();
-                return ((PoslovniProstorOdgovor)(this.results[0]));
-            }
-        }
-    }
-    
-    /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "4.6.81.0")]
     public delegate void echoCompletedEventHandler(object sender, echoCompletedEventArgs e);
     
     /// <remarks/>
@@ -2279,6 +2045,32 @@ namespace Cis {
             get {
                 this.RaiseExceptionIfNecessary();
                 return ((string)(this.results[0]));
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "4.6.81.0")]
+    public delegate void provjeraCompletedEventHandler(object sender, provjeraCompletedEventArgs e);
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "4.6.81.0")]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    public partial class provjeraCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+        
+        private object[] results;
+        
+        internal provjeraCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+                base(exception, cancelled, userState) {
+            this.results = results;
+        }
+        
+        /// <remarks/>
+        public ProvjeraOdgovor Result {
+            get {
+                this.RaiseExceptionIfNecessary();
+                return ((ProvjeraOdgovor)(this.results[0]));
             }
         }
     }

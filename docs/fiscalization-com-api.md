@@ -1,6 +1,6 @@
 # COM API specifikacija
 
-Ovdje je cijeli COM API zajedno sa helper metodama i field-ovima. Za strukturu generiranih proxy objekata (_RacunType, RacunZahtjev, RacunOdgovor, PoslovniProstorType_, ...) vidi source [FiskalizacijaService.cs][fiscalization-service.cs] ili WSDL shemu.
+Ovdje je cijeli COM API zajedno sa helper metodama i field-ovima. Za strukturu generiranih proxy objekata (_RacunType, RacunZahtjev, RacunOdgovor, ProvjeraOdgovor, ...) vidi source [FiskalizacijaService.cs][fiscalization-service.cs] ili WSDL shemu.
 
 ## FiscalizationComInterop
 ```vb
@@ -8,9 +8,9 @@ Ovdje je cijeli COM API zajedno sa helper metodama i field-ovima. Za strukturu g
 RacunOdgovor SendInvoice(RacunType, (X509Certificate2), timeout/ms: Int, isDemo: Bool, check_response_signature: Bool)
 RacunOdgovor SendInvoiceRequest(RacunZahtjev, (X509Certificate2), timeout/ms: Int, isDemo: Bool, check_response_signature: Bool)
 
-' Slanje poslovnog prostora
-PoslovniProstorOdgovor SendLocation(PoslovniProstorType, (X509Certificate2), timeout/ms: Int, isDemo: Bool, check_response_signature: Bool)
-PoslovniProstorOdgovor SendLocationRequest(PoslovniProstorZahtjev, (X509Certificate2), timeout/ms: Int, isDemo: Bool, check_response_signature: Bool)
+' Provjera računa
+ProvjeraOdgovor CheckInvoice(RacunType, (X509Certificate2), timeout/ms: Int, isDemo: Bool, check_response_signature: Bool)
+ProvjeraOdgovor CheckInvoiceRequest(RacunZahtjev, (X509Certificate2), timeout/ms: Int, isDemo: Bool, check_response_signature: Bool)
 
 ' Echo
 String SendEcho(String, timeout/ms: Int, isDemo: Bool)
@@ -24,8 +24,8 @@ GenerateZki(RacunType, (X509Certificate2))
 ' Kreiranje zahtjeva za račun (ako se koristi SendInvoiceRequest)
 RacunZahtjev CreateInvoiceRequest(RacunType)
 
-' Kreiranje zahtjeva za popslovni prostor (ako se koristi SendLocationRequest)
-PoslovniProstorZahtjev CreateLocationRequest(PoslovniProstorType)
+' Kreiranje zahtjeva za provjeru račun (ako se koristi CheckInvoiceRequest)
+ProvjeraZahtjev CreateCheckRequest(RacunType)
 
 ' Potpisivanje zatjeva (RacunZahtjev ili PoslovniProstorZahtjev)
 Sign(zahtjev: ICisRequest, (X509Certificate2))
@@ -55,9 +55,6 @@ NacinPlacanjaType_G
 NacinPlacanjaType_K
 NacinPlacanjaType_O
 NacinPlacanjaType_T
-
-' Oznaka zatvaranja
-OznakaZatvaranjaType_Z
 ```
 
 #### VBScript - pomoćne metode za konverziju Variant() array-a

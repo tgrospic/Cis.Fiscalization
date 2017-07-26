@@ -1,0 +1,8 @@
+﻿Datum verzije: 27.04.2017.
+verzija: 1.4
+
+Promjene:
+	- u WSDL-u izbačena metoda 'poslovniProstor'
+	- u schemi izbačeni elementi 'PoslovniProstorZahtjev', 'PoslovniProstorOdgovor'i ostalo vezano za prijavu poslovnih prostora 
+
+----------------------------------------------------------------------------------------------------

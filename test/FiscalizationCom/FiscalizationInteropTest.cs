@@ -19,11 +19,14 @@ namespace FiscalizationTest
 		}
 
 		[TestMethod]
-		public void TestLocationRequest()
+		public void TestCheckInvoiceRequest()
 		{
 			var com = new FiscalizationComInterop();
+			var invoice = Demo.Invoice(Demo.Oib);
 
-			var result = com.SendLocation(Demo.Location(Demo.Oib), Demo.Certificate, timeout: 0, isDemo: true, checkResponseSignature: true);
+			var _ = com.SendInvoice(invoice, Demo.Certificate, timeout: 0, isDemo: true, checkResponseSignature: true);
+
+			var result = com.CheckInvoice(invoice, Demo.Certificate, timeout: 0, isDemo: true, checkResponseSignature: true);
 
 			Assert.IsNotNull(result, "Result is null.");
 		}

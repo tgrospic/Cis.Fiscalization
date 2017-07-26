@@ -7,7 +7,7 @@
 _**Napomena**: Zbog promjene u minimalnoj verziji TLS enkripcije od `CIS v1.3` ova komponenta zahtjeva **.NET 4.5** za komunikaciju sa serverom ([detaljnije](#cis-v13---tls-v11--tls-v12)).  
 Zbog ove promjene izdan je novi release COM komponente `v1.2.1-com`._
 
-.NET (C#) wrapper oko generiranog SOAP klijenta za pozivanje fiskalizacijskog servisa porezne uprave `CIS v1.3`.
+.NET (C#) wrapper oko generiranog SOAP klijenta za pozivanje fiskalizacijskog servisa porezne uprave `CIS WSDL v1.4`.
 
 Sa Microsoft [Wsdl.exe][wsdl.exe] tool-om su generirane proxy klase sa strukturom po WSDL shemi koja je objavljena na stranicama porezne uprave [Tehničke specifikacije][porezna-spec] i koja je uključena u source kôd projekta.  
 Preko generiranog SOAP klijenta [FiskalizacijaService][fiscalization-service.cs] se rade svi SOAP pozivi prema __CIS__ servisu. Kompletna implementacija je u [Fiscalization][fiscalization.cs] klasi sa dodatkom async metoda u [Fiscalization.Async.cs][fiscalization-async.cs] file-u. :smile:
@@ -55,18 +55,18 @@ public static class Fiscalization
 {
     // Async .NET 4.5 :: Fiscalization.Async.cs
     Task<RacunOdgovor> SendInvoiceAsync(RacunType invoice, X509Certificate2 cert);
-    Task<PoslovniProstorOdgovor> SendLocationAsync(PoslovniProstorType location, X509Certificate2 cert);
+    Task<ProvjeraOdgovor> CheckInvoiceAsync(RacunType invoice, X509Certificate2 cert)
 
     // Sync :: Fiscalization.cs
     RacunOdgovor SendInvoice(RacunType invoice, X509Certificate2 cert);
-    PoslovniProstorOdgovor SendLocation(PoslovniProstorType location, X509Certificate2 cert);
+    ProvjeraOdgovor CheckInvoice(RacunType invoice, X509Certificate2 cert);
 }
 ```
 
 Svaka metoda još opcionalno prima funkciju `Action<FiskalizacijaService>` za postavljanje
 parametara generiranoj proxy klasi __FiskalizacijaService__ (npr. url, timeout...).
 
-Za _RacunType, RacunOdgovor, PoslovniProstorType, PoslovniProstorOdgovor_ i ostale generirane proxy klase vidi source [FiskalizacijaService.cs][fiscalization-service.cs].
+Za _RacunType, RacunOdgovor, ProvjeraOdgovor_ i ostale generirane proxy klase vidi source [FiskalizacijaService.cs][fiscalization-service.cs].
 
 Primjer poziva servisa za slanje računa
 ```cs
@@ -92,7 +92,7 @@ var invoice = new RacunType()
         {
             Stopa = 25.ToString("N2", CultureInfo.InvariantCulture),
             Osnovica = 2.34.ToString("N2", CultureInfo.InvariantCulture),
-            Iznos = 0.59.ToString("N2", CultureInfo.InvariantCulture),
+            Iznos = .56.ToString("N2", CultureInfo.InvariantCulture)
         }
     },
     USustPdv = true
@@ -131,7 +131,8 @@ RacunOdgovor response = await Fiscalization.SendInvoiceAsync(invoice, certificat
 
 Od `CIS v1.3` verzija protokola za enkripciju preko HTTPS-a je `TLS v1.1` ili `TLS v1.2`.
 
-Ova komponenta koristi `System.Net` za komunikaciju u kojoj su ti protokoli podržani od **.NET 4.5** verzije. .NET 4.6 ima default postavljenu verziju TLS 1.2 dok .NET 4.5 nema pa se to može napraviti na sljedeći način:
+Ova komponenta koristi `System.Net` za komunikaciju u kojoj su ti protokoli podržani od **.NET 4.5** verzije.
+.NET 4.6 ima default postavljenu verziju TLS 1.2 dok .NET 4.5 nema pa se to može napraviti na sljedeći način:
 
 ```cs
 ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
@@ -184,7 +185,7 @@ start Fiscalization.sln
 
 [docs-com]: ./docs/fiscalization-com.md
 [docs-com-api]: ./docs/fiscalization-com-api.md
-[cis-version-image]: https://cdn.rawgit.com/tgrospic/Cis.Fiscalization/master/docs/cis-service-version.svg?v1.3
+[cis-version-image]: https://cdn.rawgit.com/tgrospic/Cis.Fiscalization/master/docs/cis-service-version-1.4.svg
 [fiscalization.cs]: ./src/Fiscalization/Cis/Fiscalization.cs
 [fiscalization-async.cs]: ./src/Fiscalization/Cis/Fiscalization.Async.cs
 [fiscalization-service.cs]: ./src/Fiscalization/Cis/FiskalizacijaService.cs

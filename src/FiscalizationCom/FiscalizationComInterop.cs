@@ -37,7 +37,7 @@ public class FiscalizationComInterop
 	}
 
 	/// <summary>
-	/// Send invoice request
+	/// Send invoice
 	/// </summary>
 	/// <param name="invoice">Invoice to send</param>
 	/// <param name="certificate">Signing certificate</param>
@@ -53,35 +53,35 @@ public class FiscalizationComInterop
 	}
 
 	/// <summary>
-	/// Send location request
+	/// Check invoice request
 	/// </summary>
-	/// <param name="request">Request to send</param>
+	/// <param name="request">Request to check</param>
 	/// <param name="certificate">Signing certificate</param>
 	/// <param name="timeout">Timeout in miliseconds, 0(default) = 100sec.</param>
 	/// <param name="isDemo">Connect to production or demo CIS service</param>
 	/// <param name="checkResponseSignature">Check if response signature is valid</param>
 	/// <returns>Response from CIS service</returns>
-	public PoslovniProstorOdgovor SendLocationRequest(PoslovniProstorZahtjev request, X509Certificate2 certificate,
+	public ProvjeraOdgovor CheckInvoiceRequest(ProvjeraZahtjev request, X509Certificate2 certificate,
 		int timeout = 0, bool isDemo = false, bool checkResponseSignature = true)
 	{
 		// Send request
-		return Fiscalization.SendLocationRequest(request, certificate, ServiceSetupHandler(timeout, isDemo, checkResponseSignature));
+		return Fiscalization.CheckInvoiceRequest(request, certificate, ServiceSetupHandler(timeout, isDemo, checkResponseSignature));
 	}
 
 	/// <summary>
-	/// Send location request
+	/// Check invoice
 	/// </summary>
-	/// <param name="location">Location to send</param>
+	/// <param name="invoice">Invoice to check</param>
 	/// <param name="certificate">Signing certificate</param>
 	/// <param name="timeout">Timeout in miliseconds, 0(default) = 100sec.</param>
 	/// <param name="isDemo">Connect to production or demo CIS service</param>
 	/// <param name="checkResponseSignature">Check if response signature is valid</param>
 	/// <returns>Response from CIS service</returns>
-	public PoslovniProstorOdgovor SendLocation(PoslovniProstorType location, X509Certificate2 certificate,
+	public ProvjeraOdgovor CheckInvoice(RacunType invoice, X509Certificate2 certificate,
 		int timeout = 0, bool isDemo = false, bool checkResponseSignature = true)
 	{
 		// Send request
-		return Fiscalization.SendLocation(location, certificate, ServiceSetupHandler(timeout, isDemo, checkResponseSignature));
+		return Fiscalization.CheckInvoice(invoice, certificate, ServiceSetupHandler(timeout, isDemo, checkResponseSignature));
 	}
 
 	/// <summary>
@@ -140,14 +140,14 @@ public class FiscalizationComInterop
 		};
 	}
 
-	public PoslovniProstorZahtjev CreateLocationRequest(PoslovniProstorType location)
+	public ProvjeraZahtjev CreateCheckRequest(RacunType invoice)
 	{
-		if (location == null)
-			throw new ArgumentNullException("location");
+		if (invoice == null)
+			throw new ArgumentNullException("invoice");
 
-		return new PoslovniProstorZahtjev
+		return new ProvjeraZahtjev
 		{
-			PoslovniProstor = location,
+			Racun = invoice,
 			Zaglavlje = Fiscalization.GetRequestHeader()
 		};
 	}
@@ -279,15 +279,6 @@ public class FiscalizationComInterop
 	public NacinPlacanjaType NacinPlacanjaType_T
 	{
 		get { return NacinPlacanjaType.T; }
-	}
-
-	#endregion
-
-	#region OznakaZatvaranjaType
-
-	public OznakaZatvaranjaType OznakaZatvaranjaType_Z
-	{
-		get { return OznakaZatvaranjaType.Z; }
 	}
 
 	#endregion
