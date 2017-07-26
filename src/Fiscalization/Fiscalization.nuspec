@@ -2,24 +2,29 @@
 <package >
 	<metadata>
 		<id>Cis.Fiscalization</id>
-		<version>1.2.0</version>
+		<version>1.3.0</version>
 		<title>Fiskalizacija API (CIS)</title>
 		<authors>Tomislav Grospić</authors>
 		<owners>Tomislav Grospić</owners>
-		<releaseNotes>- dodane async metode za .NET 4.5
+		<releaseNotes>v1.3.0
+- upgrade na CIS WSDL v1.4
+- izbačena metoda za slanje poslovnog prostora
+- dodana metoda za provjeru računa
+
+v1.2.0
+- dodane async metode za .NET 4.5
 - dodane metode za jednostavniji način slanja računa i poslovnog prostora (zahtjev se kreira automatski)
 - test sa certifikatom Fina okoline 2014/2015
 - NuGet package specifikacija u projektu
 - NuGet package samo sa source kôdom bez WSDL sheme</releaseNotes>
-		<summary>.NET (C#) wrapper za pozivanje fiskalizacijskog servisa porezne uprave (CIS v1.2)</summary>
-		<description>.NET (C#) wrapper oko generiranog SOAP klijenta za pozivanje fiskalizacijskog servisa porezne uprave (CIS v1.2).
+		<summary>.NET (C#) wrapper za pozivanje fiskalizacijskog servisa porezne uprave (CIS WSDL v1.4)</summary>
+		<description>.NET (C#) wrapper oko generiranog SOAP klijenta za pozivanje fiskalizacijskog servisa porezne uprave (CIS WSDL v1.4).
 
 Sa Microsoft Wsdl.exe tool-om su generirane proxy klase sa strukturom po WSDL shemi koja je objavljena na stranicama porezne uprave Tehničke specifikacije i koja je uključena u source kôd projekta.
 Preko generiranog SOAP klijenta FiskalizacijaService se rade svi SOAP pozivi prema CIS servisu.
 
 Runtime:
-- .NET 3.5
-- .NET 4.5 (async)
+- .NET 4.5
 
 Cilj projekta
 
