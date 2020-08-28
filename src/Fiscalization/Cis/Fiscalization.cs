@@ -1,4 +1,4 @@
-﻿// Cis.Fiscalization v1.3.0 :: CIS WSDL v1.4 (2012-2017)
+// Cis.Fiscalization v1.3.0 :: CIS WSDL v1.4 (2012-2017)
 // https://github.com/tgrospic/Cis.Fiscalization
 // Copyright (c) 2013-present Tomislav Grospic
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
@@ -78,7 +78,7 @@ namespace Cis
 			Action<FiskalizacijaService> setupService = null)
 		{
 			if (request == null) throw new ArgumentNullException("request");
-			if (request.Racun == null) throw new ArgumentNullException("request.Racun");
+			if (request.Item == null) throw new ArgumentNullException("request.Racun");
 
 			return SignAndSendRequest<ProvjeraZahtjev, ProvjeraOdgovor>(request, x => x.provjera, certificate, setupService);
 		}
@@ -97,7 +97,7 @@ namespace Cis
 
 			var request = new ProvjeraZahtjev
 			{
-				Racun = invoice,
+				Item = invoice,
 				Zaglavlje = Cis.Fiscalization.GetRequestHeader()
 			};
 

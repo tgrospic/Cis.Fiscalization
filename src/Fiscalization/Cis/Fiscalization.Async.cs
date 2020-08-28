@@ -61,7 +61,7 @@ namespace Cis
 			Action<FiskalizacijaService> setupService = null)
 		{
 			if (request == null) throw new ArgumentNullException("request");
-			if (request.Racun == null) throw new ArgumentNullException("request.Racun");
+			if (request.Item == null) throw new ArgumentNullException("request.Racun");
 
 			return SignAndSendRequestAsync<ProvjeraZahtjev, ProvjeraOdgovor>(request, x => x.ProvjeraAsync, certificate, setupService);
 		}
@@ -80,7 +80,7 @@ namespace Cis
 
 			var request = new ProvjeraZahtjev
 			{
-				Racun = invoice,
+				Item = invoice,
 				Zaglavlje = Cis.Fiscalization.GetRequestHeader()
 			};
 
