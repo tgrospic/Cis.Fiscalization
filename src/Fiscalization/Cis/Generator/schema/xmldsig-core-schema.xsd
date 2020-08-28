@@ -1,14 +1,7 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!-- <!DOCTYPE schema PUBLIC "-//W3C//DTD XMLSchema 200102//EN" "http://www.w3.org/2001/XMLSchema.dtd" [
-   <!ATTLIST schema
-     xmlns:ds CDATA #FIXED "http://www.w3.org/2000/09/xmldsig#">
-   <!ENTITY dsig 'http://www.w3.org/2000/09/xmldsig#'>
-   <!ENTITY % p ''>
-   <!ENTITY % s ''>
-  ]>
-<! Schema for XML Signatures
+<?xml version="1.0" encoding="UTF-8"?><schema xmlns="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" targetNamespace="http://www.w3.org/2000/09/xmldsig#" version="0.1" xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+<!-- Schema for XML Signatures
     http://www.w3.org/2000/09/xmldsig#
-    $Revision: 1.1 $ on $Date: 2012/09/17 13:13:02 $ by $Author: s30zepu $
+    $Revision: 1.1 $ on $Date: 2012/12/13 11:30:24 $ by $Author: s30alto $
 
     Copyright 2001 The Internet Society and W3C (Massachusetts Institute
     of Technology, Institut National de Recherche en Informatique et en
@@ -21,7 +14,7 @@
     [1] http://www.w3.org/Consortium/Legal/copyright-software-19980720
     [2] http://www.w3.org/Consortium/Legal/IPR-FAQ-20000620.html#DTD
 -->
-<schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" targetNamespace="http://www.w3.org/2000/09/xmldsig#" version="0.1" elementFormDefault="qualified">
+<!-- <schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" targetNamespace="http://www.w3.org/2000/09/xmldsig#" version="0.1" elementFormDefault="qualified"> -->
 
 <!-- Basic Types Defined for Signatures -->
 
@@ -37,8 +30,8 @@
   <sequence>
     <element ref="ds:SignedInfo"/>
     <element ref="ds:SignatureValue"/>
-    <element ref="ds:KeyInfo" minOccurs="0"/>
-    <element ref="ds:Object" minOccurs="0" maxOccurs="unbounded"/>
+    <element minOccurs="0" ref="ds:KeyInfo"/>
+    <element maxOccurs="unbounded" minOccurs="0" ref="ds:Object"/>
   </sequence>
   <attribute name="Id" type="ID" use="optional"/>
 </complexType>
@@ -59,25 +52,25 @@
   <sequence>
     <element ref="ds:CanonicalizationMethod"/>
     <element ref="ds:SignatureMethod"/>
-    <element ref="ds:Reference" maxOccurs="unbounded"/>
+    <element maxOccurs="unbounded" ref="ds:Reference"/>
   </sequence>
   <attribute name="Id" type="ID" use="optional"/>
 </complexType>
 
   <element name="CanonicalizationMethod" type="ds:CanonicalizationMethodType"/>
-  <complexType name="CanonicalizationMethodType" mixed="true">
+  <complexType mixed="true" name="CanonicalizationMethodType">
     <sequence>
-      <any namespace="##any" minOccurs="0" maxOccurs="unbounded"/>
+      <any maxOccurs="unbounded" minOccurs="0" namespace="##any"/>
       <!-- (0,unbounded) elements from (1,1) namespace -->
     </sequence>
     <attribute name="Algorithm" type="anyURI" use="required"/>
   </complexType>
 
   <element name="SignatureMethod" type="ds:SignatureMethodType"/>
-  <complexType name="SignatureMethodType" mixed="true">
+  <complexType mixed="true" name="SignatureMethodType">
     <sequence>
-      <element name="HMACOutputLength" minOccurs="0" type="ds:HMACOutputLengthType"/>
-      <any namespace="##other" minOccurs="0" maxOccurs="unbounded"/>
+      <element minOccurs="0" name="HMACOutputLength" type="ds:HMACOutputLengthType"/>
+      <any maxOccurs="unbounded" minOccurs="0" namespace="##other"/>
       <!-- (0,unbounded) elements from (1,1) external namespace -->
     </sequence>
     <attribute name="Algorithm" type="anyURI" use="required"/>
@@ -88,7 +81,7 @@
 <element name="Reference" type="ds:ReferenceType"/>
 <complexType name="ReferenceType">
   <sequence>
-    <element ref="ds:Transforms" minOccurs="0"/>
+    <element minOccurs="0" ref="ds:Transforms"/>
     <element ref="ds:DigestMethod"/>
     <element ref="ds:DigestValue"/>
   </sequence>
@@ -100,13 +93,13 @@
   <element name="Transforms" type="ds:TransformsType"/>
   <complexType name="TransformsType">
     <sequence>
-      <element ref="ds:Transform" maxOccurs="unbounded"/>
+      <element maxOccurs="unbounded" ref="ds:Transform"/>
     </sequence>
   </complexType>
 
   <element name="Transform" type="ds:TransformType"/>
-  <complexType name="TransformType" mixed="true">
-    <choice minOccurs="0" maxOccurs="unbounded">
+  <complexType mixed="true" name="TransformType">
+    <choice maxOccurs="unbounded" minOccurs="0">
       <any namespace="##other" processContents="lax"/>
       <!-- (1,1) elements from (0,unbounded) namespaces -->
       <element name="XPath" type="string"/>
@@ -117,9 +110,9 @@
 <!-- End Reference -->
 
 <element name="DigestMethod" type="ds:DigestMethodType"/>
-<complexType name="DigestMethodType" mixed="true">
+<complexType mixed="true" name="DigestMethodType">
   <sequence>
-    <any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+    <any maxOccurs="unbounded" minOccurs="0" namespace="##other" processContents="lax"/>
   </sequence>
   <attribute name="Algorithm" type="anyURI" use="required"/>
 </complexType>
@@ -134,7 +127,7 @@
 <!-- Start KeyInfo -->
 
 <element name="KeyInfo" type="ds:KeyInfoType"/>
-<complexType name="KeyInfoType" mixed="true">
+<complexType mixed="true" name="KeyInfoType">
   <choice maxOccurs="unbounded">
     <element ref="ds:KeyName"/>
     <element ref="ds:KeyValue"/>
@@ -143,7 +136,7 @@
     <element ref="ds:PGPData"/>
     <element ref="ds:SPKIData"/>
     <element ref="ds:MgmtData"/>
-    <any processContents="lax" namespace="##other"/>
+    <any namespace="##other" processContents="lax"/>
     <!-- (1,1) elements from (0,unbounded) namespaces -->
   </choice>
   <attribute name="Id" type="ID" use="optional"/>
@@ -153,7 +146,7 @@
   <element name="MgmtData" type="string"/>
 
   <element name="KeyValue" type="ds:KeyValueType"/>
-  <complexType name="KeyValueType" mixed="true">
+  <complexType mixed="true" name="KeyValueType">
    <choice>
      <element ref="ds:DSAKeyValue"/>
      <element ref="ds:RSAKeyValue"/>
@@ -164,7 +157,7 @@
   <element name="RetrievalMethod" type="ds:RetrievalMethodType"/>
   <complexType name="RetrievalMethodType">
     <sequence>
-      <element ref="ds:Transforms" minOccurs="0"/>
+      <element minOccurs="0" ref="ds:Transforms"/>
     </sequence>
     <attribute name="URI" type="anyURI"/>
     <attribute name="Type" type="anyURI" use="optional"/>
@@ -202,12 +195,12 @@
   <choice>
     <sequence>
       <element name="PGPKeyID" type="base64Binary"/>
-      <element name="PGPKeyPacket" type="base64Binary" minOccurs="0"/>
-      <any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+      <element minOccurs="0" name="PGPKeyPacket" type="base64Binary"/>
+      <any maxOccurs="unbounded" minOccurs="0" namespace="##other" processContents="lax"/>
     </sequence>
     <sequence>
       <element name="PGPKeyPacket" type="base64Binary"/>
-      <any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+      <any maxOccurs="unbounded" minOccurs="0" namespace="##other" processContents="lax"/>
     </sequence>
   </choice>
 </complexType>
@@ -220,7 +213,7 @@
 <complexType name="SPKIDataType">
   <sequence maxOccurs="unbounded">
     <element name="SPKISexp" type="base64Binary"/>
-    <any namespace="##other" processContents="lax" minOccurs="0"/>
+    <any minOccurs="0" namespace="##other" processContents="lax"/>
   </sequence>
 </complexType>
 
@@ -231,8 +224,8 @@
 <!-- Start Object (Manifest, SignatureProperty) -->
 
 <element name="Object" type="ds:ObjectType"/>
-<complexType name="ObjectType" mixed="true">
-  <sequence minOccurs="0" maxOccurs="unbounded">
+<complexType mixed="true" name="ObjectType">
+  <sequence maxOccurs="unbounded" minOccurs="0">
     <any namespace="##any" processContents="lax"/>
   </sequence>
   <attribute name="Id" type="ID" use="optional"/>
@@ -243,7 +236,7 @@
 <element name="Manifest" type="ds:ManifestType"/>
 <complexType name="ManifestType">
   <sequence>
-    <element ref="ds:Reference" maxOccurs="unbounded"/>
+    <element maxOccurs="unbounded" ref="ds:Reference"/>
   </sequence>
   <attribute name="Id" type="ID" use="optional"/>
 </complexType>
@@ -251,13 +244,13 @@
 <element name="SignatureProperties" type="ds:SignaturePropertiesType"/>
 <complexType name="SignaturePropertiesType">
   <sequence>
-    <element ref="ds:SignatureProperty" maxOccurs="unbounded"/>
+    <element maxOccurs="unbounded" ref="ds:SignatureProperty"/>
   </sequence>
   <attribute name="Id" type="ID" use="optional"/>
 </complexType>
 
    <element name="SignatureProperty" type="ds:SignaturePropertyType"/>
-   <complexType name="SignaturePropertyType" mixed="true">
+   <complexType mixed="true" name="SignaturePropertyType">
      <choice maxOccurs="unbounded">
        <any namespace="##other" processContents="lax"/>
        <!-- (1,1) elements from (1,unbounded) namespaces -->
@@ -283,9 +276,9 @@
       <element name="P" type="ds:CryptoBinary"/>
       <element name="Q" type="ds:CryptoBinary"/>
     </sequence>
-    <element name="G" type="ds:CryptoBinary" minOccurs="0"/>
+    <element minOccurs="0" name="G" type="ds:CryptoBinary"/>
     <element name="Y" type="ds:CryptoBinary"/>
-    <element name="J" type="ds:CryptoBinary" minOccurs="0"/>
+    <element minOccurs="0" name="J" type="ds:CryptoBinary"/>
     <sequence minOccurs="0">
       <element name="Seed" type="ds:CryptoBinary"/>
       <element name="PgenCounter" type="ds:CryptoBinary"/>

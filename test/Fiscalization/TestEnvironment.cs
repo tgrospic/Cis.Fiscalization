@@ -1,4 +1,4 @@
-﻿using Cis;
+using Cis;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -32,6 +32,10 @@ namespace FiscalizationTest
 
 		static TestEnvironment()
 		{
+			// MUST be set for .NetFramework 4.7 and latest! Otherwise we get "System.Security.Cryptography.CryptographicException: Invalid algorithm specified."
+			AppContext.SetSwitch( "Switch.System.Security.Cryptography.Xml.UseInsecureHashAlgorithms", true );
+			AppContext.SetSwitch( "Switch.System.Security.Cryptography.Pkcs.UseInsecureHashAlgorithms", true );
+
 			// Unconditionally trust the server certificate
 			ServicePointManager.ServerCertificateValidationCallback = new RemoteCertificateValidationCallback((sender, cert, chain, sslPolicyErrors) => true);
 		}
